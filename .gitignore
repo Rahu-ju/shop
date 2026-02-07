@@ -1,0 +1,19 @@
+# Python / Django
+__pycache__/
+*.pyc
+*.sqlite3
+
+
+# environment variables
+.env
+.env.prod
+
+# Docker
+
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+.DS_Store

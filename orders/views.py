@@ -15,6 +15,7 @@ def order_create(request):
         if form.is_valid():
             order = form.save()
 
+            # Take each item from the cart and create the order item.
             for item in cart:
                 OrderItem.objects.create(
                     order = order,
@@ -23,14 +24,18 @@ def order_create(request):
                     quantity = item['quantity']
                 )
             
+            #Clear the cart and initiate asynchronous task
             cart.clear()
-            #initiate asynchronous task
             order_created.delay(order.id)
 
+            # set order id to session and then redirect to the payment process
+            request.session['order_id'] = order.id
+            return redirect('payment:process')
 
-            template = 'orders/created.html'
-            context = {'order': order, }
-            return render(request, template, context)
+
+            # template = 'orders/created.html'
+            # context = {'order': order, }
+            # return render(request, template, context)
         
         else:
             # template can catch the error using form.error

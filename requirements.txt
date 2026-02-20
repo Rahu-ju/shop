@@ -7,9 +7,12 @@ python-decouple==3.8
 # For image
 pillow==12.0.0
 
-#For distributes task 
+# For distributes task 
 celery==5.6.2
 flower==2.0.1
 
-#For payment processing
+# For payment processing
 stripe==14.3.0
+
+# Generate PDF
+weasyprint==68.1

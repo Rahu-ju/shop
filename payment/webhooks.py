@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from orders.models import Order
+from .task import payment_completed
 
 
 
@@ -40,6 +41,9 @@ def stripe_webhook(request):
             print(session.payment_intent)
             order.stripe_id = session.payment_intent
             order.save()
+
+            # Send mail asynchronously by celery
+            payment_completed.delay(order.id)
             
 
     return HttpResponse(status=200)

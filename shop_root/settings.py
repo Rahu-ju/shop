@@ -39,6 +39,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Control room panels
+    'dj_celery_panel',
+    'dj_cache_panel',
+    'dj_urls_panel',
+
+    # Django Control Room
+    'dj_control_room',
+
     # local apps
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',

@@ -39,14 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Control room panels
-    'dj_celery_panel',
-    'dj_cache_panel',
-    'dj_urls_panel',
-
-    # Django Control Room
-    'dj_control_room',
-
+    
     # local apps
     'shop.apps.ShopConfig',
     'cart.apps.CartConfig',
@@ -142,6 +135,9 @@ MEDIA_ROOT = BASE_DIR / 'media_root/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Customize settings below except static file
 
 # Cart using session
 # To store the cart in the session below key is used

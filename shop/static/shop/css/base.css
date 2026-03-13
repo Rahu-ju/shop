@@ -127,6 +127,9 @@ ul.errorlist {
     color:#444;
     padding:15px 100px;
     overflow:auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 4px;
 }
 
 #header .logo {
@@ -139,7 +142,7 @@ ul.errorlist {
 
 #subheader .cart {
     float:right;
-    padding-top:4px;
+    /* padding-top:4px; */
 }
 
 #content {

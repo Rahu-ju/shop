@@ -331,3 +331,10 @@ form div.field {
     color:#666;
     border-radius:4px;
 }
+
+
+/* Custom css */
+form p {
+    overflow: hidden;
+
+}

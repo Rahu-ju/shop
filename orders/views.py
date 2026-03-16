@@ -50,7 +50,10 @@ def order_create(request):
             return render(request, template, context)
 
     else:
-        form = OrderCreationForm()
+        if request.user.is_authenticated:
+            form = OrderCreationForm(instance=request.user)
+        else:
+            form = OrderCreationForm()
         template = 'orders/create.html'
         context = {'form': form, 'cart': cart}
         return render(request, template, context)

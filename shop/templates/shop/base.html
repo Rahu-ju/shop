@@ -17,12 +17,16 @@
 
         {% if user.is_authenticated %}
 
-            <div id="username">
-                <a href="{% url 'dashboard' %}">{{ user.username }} | </a>
+            <div id="headshot">
+                <a href="{% url 'dashboard' %}"><img src="{{ user.profile.photo.url }}" style="width: 30px;height: 30px;border-radius: 50%;"></a>
             </div>
 
+            <div id="username">
+                <a href="{% url 'dashboard' %}"> {{ user.username }} |</a>
+            </div>
+            
         {% else %}
-            <a href="{% url 'login' %}">Login | </a>
+            <a href="{% url 'login' %}" style="padding-top: 7px;">Login | </a>
         {% endif %}
 
         <div class="cart">

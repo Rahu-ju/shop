@@ -338,3 +338,7 @@ form p {
     overflow: hidden;
 
 }
+
+#username, .cart {
+    padding-top: 7px;
+}

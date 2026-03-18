@@ -16,10 +16,12 @@
     <div id="subheader">
 
         {% if user.is_authenticated %}
-
-            <div id="headshot">
-                <a href="{% url 'dashboard' %}"><img src="{{ user.profile.photo.url }}" style="width: 30px;height: 30px;border-radius: 50%;"></a>
-            </div>
+        
+            {% if user.profile.photo %}
+                <div id="headshot">
+                    <a href="{% url 'dashboard' %}"><img src="{{ user.profile.photo.url }}" style="width: 30px;height: 30px;border-radius: 50%;"></a>
+                </div>
+            {% endif %}
 
             <div id="username">
                 <a href="{% url 'dashboard' %}"> {{ user.username }} |</a>
@@ -58,7 +60,12 @@
 
         {% endblock %}
     </div>
-
+{% comment %} <script>
+    window.ready(
+        document.GetElementById('<label for="id_username">Username:</label>').InnerText('or email')
+    )
+    
+</script> {% endcomment %}
 </body>
 
 </html>

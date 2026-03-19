@@ -13,6 +13,7 @@ urlpatterns = [
     # path('logout/', auth_views.LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
     # path('change-password/', auth_views.PasswordChangeView.as_view(template_name='accounts/password_change_form.html', success_url=reverse_lazy('accounts:password_change_done')), name='change_password'),
     # path('change-password-done/', auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'), name='password_change_done'),
+    path('login/', views.CustomLoginView.as_view(), name='login'),
     path('', include('django.contrib.auth.urls')),
     path('', views.dashboard, name='dashboard'),
     path('register/', views.register, name='register'),

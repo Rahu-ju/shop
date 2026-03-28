@@ -10,7 +10,7 @@
 
 <body>
     <div id="header">
-        <a href="/" class="logo">My shop</a>
+        <a href="/" class="logo">A L T A S</a>
     </div>
 
     <div id="subheader">
@@ -60,12 +60,13 @@
 
         {% endblock %}
     </div>
-{% comment %} <script>
-    window.ready(
-        document.GetElementById('<label for="id_username">Username:</label>').InnerText('or email')
-    )
+<script>
+    {% comment %} change the django auto generated label username to username or email {% endcomment %}
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('label[for="id_username"]').innerText = 'Username or email';
+    });
     
-</script> {% endcomment %}
+</script>
 </body>
 
 </html>

@@ -1,14 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UsernameField, AuthenticationForm
 from django.contrib.auth.models import User
 
 from .models import Profile
-
-
-
-class CustomAuthenticationForm(AuthenticationForm):
-    username = UsernameField(label="Username or email", widget=forms.TextInput(attrs={"autofocus": True,}))
 
 
 

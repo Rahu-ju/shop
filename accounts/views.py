@@ -5,13 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import HttpResponse
 
-from .forms import UserResgistrationForm, UserEditForm, ProfileEditForm, CustomAuthenticationForm
+from .forms import UserResgistrationForm, UserEditForm, ProfileEditForm
 from .models import Profile
-
-
-
-class CustomLoginView(LoginView):
-    form_class = CustomAuthenticationForm
 
 
 

@@ -4,5 +4,6 @@
 
 {% block content %}
     <h1>Welcome {{ new_user.first_name }}!</h1>
-    <p>Your account has been successfully created. Now you can <a href="{% url "login" %}">log in</a></p>
+    {% comment %} <p>Your account has been successfully created. Now you can <a href="{% url "login" %}">log in</a></p> {% endcomment %}
+    <P>We have sent you a verification link to your mail. Please check your inbox. The link will expire in 5 minutes.</P>
 {% endblock %}

@@ -60,13 +60,10 @@
 
         {% endblock %}
     </div>
-<script>
-    {% comment %} change the django auto generated label username to username or email {% endcomment %}
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelector('label[for="id_username"]').innerText = 'Username or email';
-    });
-    
-</script>
+
+{% block script %}
+
+{% endblock %}
 </body>
 
 </html>

@@ -17,8 +17,15 @@ class Cart:
         if not cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
-        
+    
 
+    def save(self):
+            '''
+            Save the modified session
+            '''
+            self.session.modified = True
+
+    
     def add(self, product, quantity=1, override_quantity=False):
         '''
         Add product to the cart or update its quantity.
@@ -34,6 +41,7 @@ class Cart:
 
         if override_quantity:
             self.cart[product_id]['quantity'] = quantity
+            self.save()
         else:
             self.cart[product_id]['quantity'] += quantity
             self.save()
@@ -62,7 +70,7 @@ class Cart:
         Iterate through the cart keys and get the product from the database.
         Then add them to the cart.
         '''
-
+        
         products_ids = self.cart.keys()
         products = Product.objects.filter(id__in=products_ids)
         cart = self.cart.copy()

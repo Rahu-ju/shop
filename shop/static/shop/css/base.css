@@ -342,3 +342,7 @@ form p {
 #username, .cart {
     padding-top: 7px;
 }
+
+thead th.num {
+    text-align:right;
+}

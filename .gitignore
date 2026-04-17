@@ -9,7 +9,7 @@ __pycache__/
 .env.prod
 
 # Docker
-
+docker-compose-prod.yml
 
 # IDEs
 .vscode/

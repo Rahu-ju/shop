@@ -1,13 +1,46 @@
 services:
+
+
   web:
-
     build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes: 
+      - .:/app
+    env_file: 
+      - .env.prod
+    ports: 
+      - "8000:8000"
 
-    command: gunicorn project_root.wsgi:application --bind 0.0.0.0:8000
 
-    volumes: [".:/app"]
-
-    env_file: [".env.prod"]
-
-    ports: ["8000:8000"]
+  rabbitmq:
+    image: rabbitmq:4.2.3-management
+    env_file:
+      - .env
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     
+  
+
+  celery:
+    build: .
+    command: celery -A shop_root worker -l info
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    depends_on:
+      - rabbitmq
+    
+
+
+  flower:
+    build: .
+    command: celery --broker=amqp://guest:guest@rabbitmq:5672// flower --basic-auth=username:password
+    ports:
+      - "5555:5555"
+    depends_on:
+      - celery
+      - rabbitmq
+
+

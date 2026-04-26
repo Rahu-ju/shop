@@ -1,15 +1,16 @@
 # Python / Django
 __pycache__/
 *.pyc
-*.sqlite3
 
 
 # environment variables
 .env
 .env.prod
 
+# Databases
+
+
 # Docker
-docker-compose-prod.yml
 
 # IDEs
 .vscode/
@@ -18,6 +19,6 @@ docker-compose-prod.yml
 # OS
 .DS_Store
 
-# static files dirs
-static_root/
-media_root/
+# Others
+
+

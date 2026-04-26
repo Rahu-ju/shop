@@ -4,6 +4,13 @@ Django==5.1.2
 # Environment variables management
 python-decouple==3.8
 
+# Application server
+pyuwsgi==2.0.30.post1
+
+# Postgres Database adaptor
+psycopg==3.3.3
+
+
 # For image
 pillow==12.0.0
 

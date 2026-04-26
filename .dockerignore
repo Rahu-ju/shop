@@ -33,3 +33,6 @@ Dockerfile
 docker-compose.yml
 docker-compose-prod.yml
 .dockerignore
+
+# Others
+useful-scripts.txt

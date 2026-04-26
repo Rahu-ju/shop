@@ -1,51 +1,75 @@
+networks:
+  shop-backend:
+    internal: true
+  shop-frontend:
+
+
+  
 services:
+
+  nginx:
+    image: nginx:1.30.0
+    volumes:
+      - ./config/nginx:/etc/nginx/templates
+      - .:/app
+    ports:
+      - "80:80"
+    networks:
+      shop-backend:
+      shop-frontend:
 
 
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: ["uwsgi", "--ini", "/app/config/uwsgi/uwsgi.ini"]
     volumes: 
       - .:/app
     env_file: 
       - .env.prod
-    ports: 
-      - "8000:8000"
     depends_on:
       - rabbitmq
+      - db
+    networks:
+      shop-backend:
 
+
+  db:
+    image: postgres:17.9
+    env_file:
+      - .env.prod
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    networks:
+      shop-backend:
 
 
   rabbitmq:
     image: rabbitmq:4.2.3-management
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+    env_file:
+      - .env.prod
+    networks:
+      shop-backend:
     
   
-
   celery:
     build: .
     command: celery -A shop_root worker -l info
     volumes:
       - .:/app
-    environment:
-      - CELERY_BROKER_URL=amqp://guest:guest@rabbitmq:5672//
+    env_file:
+      - .env.prod
     depends_on:
       - rabbitmq
       - web
+    networks:
+      shop-backend:
     
-
 
   flower:
     build: .
     command: celery --broker=amqp://guest:guest@rabbitmq:5672// flower --basic-auth=username:password
-    ports:
-      - "5555:5555"
     depends_on:
       - celery
       - rabbitmq
-
-
+    networks:
+      shop-backend:

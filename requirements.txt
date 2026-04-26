@@ -7,8 +7,8 @@ python-decouple==3.8
 # Application server
 pyuwsgi==2.0.30.post1
 
-# Postgres Database adaptor
-psycopg==3.3.3
+# Postgres Database adaptor binary variant
+psycopg[binary]==3.3.3
 
 
 # For image

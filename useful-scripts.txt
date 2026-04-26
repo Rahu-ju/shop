@@ -1,0 +1,6 @@
+# To generate 50 latter secret key using python 
+python3 -c 'import secrets; print(secrets.token_urlsafe(50))'
+
+## Docker info and handle issues
+# To add current user to docker group
+sudo usermod -aG docker $USER

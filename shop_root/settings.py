@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG')
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -87,8 +87,11 @@ WSGI_APPLICATION = 'shop_root.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('POSTGRES_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': config('POSTGRES_DB', default=BASE_DIR / 'db.sqlite3'),
+        'USER': config('POSTGRES_USER', default=''),
+        'PASSWORD': config('POSTGRES_PASSWORD', default=''),
+        'HOST': config('POSTGRES_HOST', default=''),
     }
 }
 
@@ -161,3 +164,6 @@ AUTHENTICATION_BACKENDS = [
  'django.contrib.auth.backends.ModelBackend',
  'accounts.authentication.EmailAuthBackend',
 ]
+
+# Celery broker url
+CELERY_BROKER_URL = config('CELERY_BROKER_URL')

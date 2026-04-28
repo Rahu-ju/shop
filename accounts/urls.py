@@ -6,6 +6,7 @@ from . import views
 
 
 urlpatterns = [
+    path('signin/', views.SigninView.as_view(), name='custom_login'),
     path('', include('django.contrib.auth.urls')),
     path('', views.dashboard, name='dashboard'),
     path('register/', views.register, name='register'),

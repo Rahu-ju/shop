@@ -2,10 +2,11 @@ import uuid
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.contrib import messages
 from django.utils import timezone
 
-from .forms import UserResgistrationForm, UserEditForm, ProfileEditForm
+from .forms import UserResgistrationForm, CustomAuthForm, UserEditForm, ProfileEditForm
 from .models import Profile
 from .utils import send_verification_email
 
@@ -49,6 +50,12 @@ def register(request):
     else:
         form = UserResgistrationForm()
         return render(request, 'accounts/registration.html', {'form': form})
+
+
+
+class SigninView(LoginView):
+    form_class = CustomAuthForm
+
 
 
 

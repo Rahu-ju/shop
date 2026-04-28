@@ -20,8 +20,8 @@ class Profile(models.Model):
     def is_token_expired(self):
         ''' The expire time is 5 minutes from the token creation time.'''
 
-        expiry_time = self.token_created_at + timedelta(minutes=5)
-        return timezone.now() > expiry_time
+        actual_expiry_time = self.token_created_at + timedelta(minutes=5)
+        return timezone.now() > actual_expiry_time
 
 
     def generate_new_token(self):

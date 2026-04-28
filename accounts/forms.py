@@ -1,6 +1,9 @@
 from django import forms
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from .models import Profile
 
@@ -39,6 +42,23 @@ class UserResgistrationForm(forms.ModelForm):
         return email_data
 
 
+
+class CustomAuthForm(AuthenticationForm):
+    def clean(self):
+        try:
+            return super().clean()
+        except ValidationError:
+            # check if it's an inactive user with correct password
+            username = self.cleaned_data.get('username')
+            password = self.cleaned_data.get('password')
+            
+            user = User.objects.filter(Q(username=username) | Q(email=username)).first()
+            
+            if user and user.check_password(password) and not user.is_active:
+                if user.profile.is_token_expired():
+                    raise ValidationError('Your verification lik has been expired, Please Sign up again.!!')
+                raise ValidationError('You are not verified yet, Check your mail, we already sent the verification link.')
+            raise
 
 class UserEditForm(forms.ModelForm):
     class Meta:

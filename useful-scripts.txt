@@ -1,6 +1,12 @@
 # To generate 50 latter secret key using python 
 python3 -c 'import secrets; print(secrets.token_urlsafe(50))'
 
+'''
+Sometimes collectstatic may not collect, in that case, run the following command will
+delete everything and collect from fresh.
+python manage.py collectstatic --noinput --clear
+'''
+
 ## Docker info and handle issues
 # To add current user to docker group
 sudo usermod -aG docker $USER

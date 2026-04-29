@@ -44,21 +44,36 @@ class UserResgistrationForm(forms.ModelForm):
 
 
 class CustomAuthForm(AuthenticationForm):
+    '''
+    The idea is when user is inactive and not verified their email then it raise 
+    validatione error with with message to show the user.
+
+    So in this case authenticate method inside clean method will rasie error for in active user
+    thats where we can put our own logic.
+    '''
     def clean(self):
         try:
+            # run parent code first
             return super().clean()
+        
+        # now here we can put our logic
         except ValidationError:
             # check if it's an inactive user with correct password
             username = self.cleaned_data.get('username')
             password = self.cleaned_data.get('password')
             
+            # in case user give their username or email we check both
             user = User.objects.filter(Q(username=username) | Q(email=username)).first()
             
             if user and user.check_password(password) and not user.is_active:
+                
                 if user.profile.is_token_expired():
                     raise ValidationError('Your verification lik has been expired, Please Sign up again.!!')
+                
                 raise ValidationError('You are not verified yet, Check your mail, we already sent the verification link.')
             raise
+
+
 
 class UserEditForm(forms.ModelForm):
     class Meta:

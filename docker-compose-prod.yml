@@ -14,6 +14,7 @@ services:
       - .:/app
     ports:
       - "80:80"
+      - "443:443"
     networks:
       shop-backend:
       shop-frontend:
@@ -68,6 +69,8 @@ services:
   flower:
     build: .
     command: celery --broker=amqp://guest:guest@rabbitmq:5672// flower --basic-auth=username:password
+    env_file:
+      - .env.prod
     depends_on:
       - celery
       - rabbitmq

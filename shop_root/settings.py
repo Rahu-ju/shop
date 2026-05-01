@@ -167,3 +167,8 @@ AUTHENTICATION_BACKENDS = [
 
 # Celery broker url
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
+
+# For security
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)

@@ -1,5 +1,6 @@
 import weasyprint
 from celery import shared_task
+
 from django.template.loader import render_to_string
 from django.contrib.staticfiles import finders
 from django.core.mail import EmailMessage

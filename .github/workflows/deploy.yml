@@ -1,0 +1,26 @@
+name: Deploy to GCE
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.GCE_HOST }}
+          username: ${{ secrets.GCE_USERNAME }}
+          key: ${{ secrets.GCE_SSH_KEY }}
+          script: |
+            cd ~/ecommerce-server
+            git pull origin master
+            echo "${{ secrets.ENV_PROD }}" > .env.prod
+            docker compose -f docker-compose.prod.yml up -d --build

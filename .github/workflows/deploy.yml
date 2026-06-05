@@ -23,4 +23,4 @@ jobs:
             cd ~/ecommerce-server
             git pull origin master
             echo "${{ secrets.ENV_PROD }}" > .env.prod
-            docker compose -f docker-compose.prod.yml up -d --build
+            docker compose -f docker-compose-prod.yml up -d --build

@@ -32,6 +32,7 @@ services:
       - db
     networks:
       shop-backend:
+      shop-frontend:
 
 
   db:

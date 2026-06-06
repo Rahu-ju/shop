@@ -9,7 +9,7 @@ __pycache__/
 
 # Databases
 data/
-
+db.sqlite3
 
 # Docker
 
@@ -20,6 +20,5 @@ data/
 # OS
 .DS_Store
 
-# Others
-
-
+# media file test purposes
+media_root/

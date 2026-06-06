@@ -23,4 +23,7 @@ jobs:
             cd ~/ecommerce-server
             git pull origin master
             echo "${{ secrets.ENV_PROD }}" > .env.prod
+            sudo chown -R $USER:$USER /data
             docker compose -f docker-compose-prod.yml up -d --build
+            sudo chown -R 33:33 media_root
+            docker compose -f docker-compose-prod.yml exec -T web python manage.py migrate

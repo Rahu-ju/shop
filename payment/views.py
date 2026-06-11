@@ -1,11 +1,14 @@
 from decimal import Decimal
-import stripe
 
 from django.shortcuts import render, get_object_or_404,redirect
 from django.conf import settings
 from django.urls import reverse
+from django.http import JsonResponse
 
 from orders.models import Order
+from .bkash import BkashService
+
+import stripe
 
 
 
@@ -62,3 +65,37 @@ def payment_completed(request):
 def payment_canceled(request):
     return render(request, 'payment/canceled.html')
 
+
+
+# Below is the bikash payment process
+def get_bkash():
+    return BkashService()
+
+
+def bkash_payment_initiate(request):
+    
+    if request.method == 'POST':
+        amount = request.POST.get('amount')
+        order_id = request.POST.get('order_id')
+
+        result = get_bkash().create_payment(amount, order_id)
+
+        if result.get('bkashURL'):
+            return redirect(result['bkashURL'])  # redirect to bKash payment page
+        else:
+            return JsonResponse({'error': result}, status=400)
+
+
+def bkash_payment_callback(request):
+    
+    payment_id = request.GET.get('paymentID')
+    status = request.GET.get('status')
+
+    if status == 'success' and payment_id:
+        result = get_bkash().execute_payment(payment_id)
+
+        if result.get('transactionStatus') == 'Completed':
+            # Mark order as paid in your DB
+            return render(request, 'payment/completed.html', {'result': result})
+
+    return render(request, 'payment/canceled.html')

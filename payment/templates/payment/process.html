@@ -41,7 +41,16 @@
 
     <form action="{% url "payment:process" %}" method="post">
         {% csrf_token %}
-        <input type="submit" value="Pay Now">
+        <input type="submit" value="Pay with card">
+    </form>
+
+    <!-- Bkash payment -->
+     <p>or</p>
+    <form method="POST" action="{% url "payment:bkash_payment_initiate" %}">
+        {% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order.id }}">
+        <input type="hidden" name="amount" value="{{ order.get_total_cost }}" required>
+        <input type="submit" value="Pay with bKash"></input>
     </form>
 
 {% endblock %}

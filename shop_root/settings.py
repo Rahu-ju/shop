@@ -177,6 +177,13 @@ AUTHENTICATION_BACKENDS = [
 # Celery broker url
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')
 
+# For bkash 
+BKASH_APP_KEY = config('BKASH_APP_KEY')
+BKASH_APP_SECRET = config('BKASH_APP_SECRET')
+BKASH_USERNAME = config('BKASH_USERNAME')
+BKASH_PASSWORD = config('BKASH_PASSWORD')
+BKASH_BASE_URL = config('BKASH_BASE_URL')
+
 # For security
 CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
 SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)

@@ -43,7 +43,7 @@ class BkashService:
         payload = {
             "mode": "0011",
             "payerReference": str(invoice_number),
-            "callbackURL": "https://qv7f5jlx-80.asse.devtunnels.ms/payment/bkash/callback/",
+            "callbackURL": "https://altas.duckdns.org/payment/bkash/callback/",
             "amount": str(amount),
             "currency": "BDT",
             "intent": "sale",

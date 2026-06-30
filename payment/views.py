@@ -95,7 +95,18 @@ def bkash_payment_callback(request):
         result = get_bkash().execute_payment(payment_id)
 
         if result.get('transactionStatus') == 'Completed':
-            # Mark order as paid in your DB
+            # Get order id and transaction id from bikash callback.
+            order_id = result.get('merchantInvoiceNumber')
+            trx_id = result.get('trxID')
+
+            try:
+                order = Order.objects.get(id=order_id)
+                order.paid = True
+                order.bkash_trx_id = trx_id
+                order.save()
+            except Order.DoesNotExist:
+                return render(request, 'payment/canceled.html', {'result': result})
+
             return render(request, 'payment/completed.html', {'result': result})
 
     return render(request, 'payment/canceled.html')

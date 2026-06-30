@@ -95,6 +95,7 @@ class OrderAdmin(admin.ModelAdmin):
         'city',
         'paid',
         order_payment,
+        'bkash_trx_id',
         'created',
         'updated',
         order_detail,

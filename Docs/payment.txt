@@ -1,0 +1,35 @@
+*** Bkash payment system explain: ***
+ I Implement the payment system like this way
+
+
+""when a user click a payment button, then it take the user to the bkash payment page.
+in this page user put their bkash number, pin, otp. then bkash take the user to the callback url.""
+
+what it does internally:
+    when user click payment button it call bkash_payment_initiate() view function, 
+    This function  Use Bkask module, this module holds
+        create_payment 
+            sends amount, invoice_number, and callbackURL to bkash
+            and gets back a bkashURL in the response - this is the link we
+            redirect the user to, so they can enter their bkash number and pin. 
+
+        grant_token method
+            It create post request to bkash to grant a token and return it
+            this token is needed to create payment in bkash.
+
+
+    User completes the payment on bkash's page (enters number, pin, otp)
+    then bkash redirects the user to our callbackURL with paymentID
+    and status as query params.
+
+    our callback view 
+        receives this, and calls execute_payment(payment_id)
+        to finalize the transaction with bkash - this confirms the payment
+        actually went through, and only then do we mark the order as paid.
+
+    execute_payment(payment_id)
+        sends a post request with paymentID and returns
+        the final transaction status (trxID, transactionStatus etc) - if
+        transactionStatus is "Completed", payment succeeded. depending on that we do save order as paid.
+
+

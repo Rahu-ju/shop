@@ -1,0 +1,132 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order confirmed — Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'static/style.css' %}">
+<script src="{% static 'static/tailwind.js' %}"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:   { 950:'#0E1826', 900:'#132038', 800:'#1B2C4A', 700:'#28406A' },
+        paper: { 50:'#FBF8F1', 100:'#F2ECDC', 200:'#E7DEC7' },
+        brass: { 400:'#D3A75C', 500:'#C08A3E', 600:'#A5732F' },
+        teal:  { 500:'#3A8079', 600:'#2C6560' },
+        rust:  { 500:'#B4502F' },
+      },
+      fontFamily: {
+        display: ['"Space Grotesk"','sans-serif'], body: ['Inter','sans-serif'], mono: ['"IBM Plex Mono"','monospace'],
+      }
+    }}
+  }
+</script>
+</head>
+<body class="font-body bg-paper-50 text-ink-950 antialiased min-h-screen flex flex-col">
+
+<!-- ============ HEADER ============ -->
+<header class="bg-ink-950 text-paper-50 border-b border-ink-800">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-2 font-display font-bold tracking-[0.18em] text-lg">
+      <svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#E7DEC7" stroke-opacity="0.4" stroke-width="2"/>
+        <line x1="50" y1="7" x2="50" y2="15" stroke="#D3A75C" stroke-width="2"/>
+        <polygon points="50,22 55,50 50,55 45,50" fill="#C08A3E"/>
+        <polygon points="50,78 55,50 50,45 45,50" fill="#F2ECDC" fill-opacity="0.55"/>
+        <circle cx="50" cy="50" r="3" fill="#FBF8F1"/>
+      </svg>
+      ATLAS
+    </a>
+    <a href="{% url 'shop:product_list' %}" class="font-display text-sm nav-link">Continue shopping</a>
+  </div>
+</header>
+
+<!-- Step indicator, final state -->
+<div class="border-b border-paper-200 bg-paper-100">
+  <div class="max-w-4xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-center gap-3 sm:gap-6 font-mono text-xs">
+    <span class="flex items-center gap-2 text-ink-950/50"><span class="w-5 h-5 rounded-full bg-teal-600 text-paper-50 flex items-center justify-center">✓</span>Cart</span>
+    <span class="w-8 h-px bg-teal-600/40"></span>
+    <span class="flex items-center gap-2 text-ink-950/50"><span class="w-5 h-5 rounded-full bg-teal-600 text-paper-50 flex items-center justify-center">✓</span>Details</span>
+    <span class="w-8 h-px bg-teal-600/40"></span>
+    <span class="flex items-center gap-2 text-ink-950"><span class="w-5 h-5 rounded-full bg-brass-500 text-ink-950 flex items-center justify-center">✓</span>Confirmation</span>
+  </div>
+</div>
+
+<section class="max-w-3xl mx-auto px-5 sm:px-8 py-16 flex-1 w-full text-center">
+  <div class="relative w-32 h-32 mx-auto mb-8">
+    <svg viewBox="0 0 200 200" class="w-full h-full">
+      <circle cx="100" cy="100" r="92" fill="none" stroke="#E7DEC7" stroke-width="1.5"/>
+      <circle cx="100" cy="100" r="70" fill="none" stroke="#E7DEC7" stroke-width="1"/>
+      <polygon points="100,44 106,100 100,108 94,100" fill="#C08A3E"/>
+      <polygon points="100,156 106,100 100,92 94,100" fill="#28406A" fill-opacity="0.35"/>
+      <circle cx="100" cy="100" r="26" fill="#C08A3E"/>
+      <path d="M88 100l8 8 18-18" fill="none" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <p class="font-mono text-sm tracking-[0.2em] text-brass-600 mb-3">ORDER CONFIRMED</p>
+  <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">You're all set.</h1>
+  <p class="text-ink-950/60 max-w-md mx-auto">Thanks, {{ order.first_name }} — Your order no {{ order.id }} and is confirmed. We're plotting the route to your door.</p>
+
+  <div class="text-left mt-10 rounded-2xl border border-paper-200 bg-paper-100 p-6 sm:p-8">
+    <div class="flex flex-wrap items-center justify-between gap-3 mb-6 pb-6 border-b border-paper-200">
+      <div>
+        <p class="font-mono text-xs text-ink-950/50">ORDER NUMBER</p>
+        <p class="font-display font-bold text-lg">{{ order.id }}</p>
+      </div>
+      <div class="text-left sm:text-right">
+        <p class="font-mono text-xs text-ink-950/50">ESTIMATED DELIVERY</p>
+        <p class="font-display font-semibold text-sm">Within, 2 days</p>
+      </div>
+    </div>
+
+    <div class="space-y-4 mb-6">
+
+      {% for item in order.items.all %}
+      <div class="flex items-center gap-3 text-sm">
+        <img src="{{ item.product.primary_image.url }}" alt="Mac Laptop" class="w-12 h-12 rounded-md object-cover bg-paper-50">
+        <div class="flex-1 min-w-0"><p>{{ item.product.name }}</p><p class="font-mono text-xs text-ink-950/50">{{ item.quantity }}</p></div>
+        <p class="font-mono">${{ item.get_cost }}</p>
+      </div>
+      {% endfor %}
+
+    </div>
+
+    <dl class="space-y-3 text-sm border-t border-paper-200 pt-5">
+      <div class="flex justify-between"><dt class="text-ink-950/60">Subtotal</dt><dd class="font-mono">${{ order.get_total_cost }}</dd></div>
+      <div class="flex justify-between"><dt class="text-ink-950/60">Shipping</dt><dd class="font-mono">$00.00</dd></div>
+      <div class="flex justify-between items-baseline pt-3 border-t border-paper-200">
+        <dt class="font-display font-semibold text-ink-950">Total paid</dt>
+        <dd class="price-tag font-mono text-lg">${{ order.get_total_cost }}</dd>
+      </div>
+    </dl>
+
+    <div class="grid sm:grid-cols-2 gap-4 mt-6 pt-6 border-t border-paper-200 text-sm">
+      <div>
+        <p class="font-mono text-xs text-ink-950/50 mb-1">DELIVERING TO</p>
+        <p>{{ order.address }}</p>
+      </div>
+      <div>
+        <p class="font-mono text-xs text-ink-950/50 mb-1">PAYMENT METHOD</p>
+        <p>Cash on delivery</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+    <a href="{% url 'shop:product_list' %}" class="btn btn-brass px-7 py-3.5 text-sm">Continue shopping</a>
+    <a href="/" class="btn btn-ghost-ink px-7 py-3.5 text-sm">Back to home</a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-ink-950 text-paper-100/50 mt-auto">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-8 text-xs text-center font-mono">© 2026 Atlas. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

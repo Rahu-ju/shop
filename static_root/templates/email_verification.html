@@ -1,0 +1,145 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email verified — Atlas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'static/style.css' %}">
+<script src="{% static 'static/tailwind.js' %}"></script>
+<script>
+  tailwind.config = {
+    theme: { extend: {
+      colors: {
+        ink:   { 950:'#0E1826', 900:'#132038', 800:'#1B2C4A', 700:'#28406A' },
+        paper: { 50:'#FBF8F1', 100:'#F2ECDC', 200:'#E7DEC7' },
+        brass: { 400:'#D3A75C', 500:'#C08A3E', 600:'#A5732F' },
+        teal:  { 500:'#3A8079', 600:'#2C6560' },
+        rust:  { 500:'#B4502F' },
+      },
+      fontFamily: {
+        display: ['"Space Grotesk"','sans-serif'], body: ['Inter','sans-serif'], mono: ['"IBM Plex Mono"','monospace'],
+      }
+    }}
+  }
+</script>
+</head>
+<body class="font-body bg-paper-50 text-ink-950 antialiased min-h-screen flex flex-col">
+
+<!-- ============ HEADER ============ -->
+<header class="bg-ink-950 text-paper-50 border-b border-ink-800">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 h-16 flex items-center justify-between">
+    <a href="{% url 'shop:home' %}" class="flex items-center gap-2 font-display font-bold tracking-[0.18em] text-lg">
+      <svg width="26" height="26" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="45" fill="none" stroke="#E7DEC7" stroke-opacity="0.4" stroke-width="2"/>
+        <line x1="50" y1="7" x2="50" y2="15" stroke="#D3A75C" stroke-width="2"/>
+        <polygon points="50,22 55,50 50,55 45,50" fill="#C08A3E"/>
+        <polygon points="50,78 55,50 50,45 45,50" fill="#F2ECDC" fill-opacity="0.55"/>
+        <circle cx="50" cy="50" r="3" fill="#FBF8F1"/>
+      </svg>
+      ATLAS
+    </a>
+    <a href="{% url 'account:custom_login' %}" class="font-display text-sm nav-link">Sign in</a>
+  </div>
+</header>
+
+{% if verified %}
+  <section class="max-w-2xl mx-auto px-5 sm:px-8 py-16 flex-1 w-full text-center">
+    <div class="relative w-32 h-32 mx-auto mb-8">
+      <svg viewBox="0 0 200 200" class="w-full h-full">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#E7DEC7" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#E7DEC7" stroke-width="1"/>
+        <polygon points="100,44 106,100 100,108 94,100" fill="#C08A3E"/>
+        <polygon points="100,156 106,100 100,92 94,100" fill="#28406A" fill-opacity="0.35"/>
+        <circle cx="100" cy="100" r="26" fill="#0E1826"/>
+        <path d="M88 100l8 8 18-18" fill="none" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">EMAIL VERIFIED</p>
+    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">Your mail is verified now.</h1>
+    <p class="text-ink-950/60 max-w-md mx-auto">
+      <span class="font-mono text-ink-950/80">rahu@example.com</span> is now verified. Your Atlas account is fully active — you're ready to check out faster and track orders going forward.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <a href="{% url 'account:custom_login' %}" class="btn btn-brass px-7 py-3.5 text-sm">Continue to sign in</a>
+      <a href="{% url 'shop:product_list' %}" class="btn btn-ghost-ink px-7 py-3.5 text-sm">Browse the store</a>
+    </div>
+
+    <p class="text-xs text-ink-950/45 mt-10">
+      Wrong account, or didn't request this? Write to <a href="mailto:hello@altas.duckdns.org" class="text-teal-600 hover:text-teal-500">hello@altas.duckdns.org</a>.
+    </p>
+  </section>
+{% endif %}
+
+{% if token_expired %}
+  <section class="max-w-2xl mx-auto px-5 sm:px-8 py-16 flex-1 w-full text-center">
+    <div class="relative w-32 h-32 mx-auto mb-8">
+      <svg viewBox="0 0 200 200" class="w-full h-full">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#E7DEC7" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#E7DEC7" stroke-width="1"/>
+        <polygon points="100,44 106,100 100,108 94,100" fill="#C08A3E"/>
+        <polygon points="100,156 106,100 100,92 94,100" fill="#28406A" fill-opacity="0.35"/>
+        <circle cx="100" cy="100" r="26" fill="#0E1826"/>
+        <path d="M88 100l8 8 18-18" fill="none" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">EMAIL NOT VERIFIED</p>
+    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">Your verifiction link has expired.</h1>
+    <p class="text-ink-950/60 max-w-md mx-auto">
+      <span class="font-mono text-ink-950/80">Hello, </span>You can again try to resend it.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <a href="{% url 'account:resend_email' token %}" class="btn btn-brass px-7 py-3.5 text-sm">Resend verification link</a>
+      <a href="{% url 'shop:product_list' %}" class="btn btn-ghost-ink px-7 py-3.5 text-sm">Browse the store</a>
+    </div>
+
+    <p class="text-xs text-ink-950/45 mt-10">
+      Wrong account, or didn't request this? Write to <a href="mailto:hello@altas.duckdns.org" class="text-teal-600 hover:text-teal-500">altas.hello@gmail.com</a>.
+    </p>
+  </section>
+
+{% endif %}
+
+{% if send_link %}
+  <section class="max-w-2xl mx-auto px-5 sm:px-8 py-16 flex-1 w-full text-center">
+    <div class="relative w-32 h-32 mx-auto mb-8">
+      <svg viewBox="0 0 200 200" class="w-full h-full">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#E7DEC7" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="70" fill="none" stroke="#E7DEC7" stroke-width="1"/>
+        <polygon points="100,44 106,100 100,108 94,100" fill="#C08A3E"/>
+        <polygon points="100,156 106,100 100,92 94,100" fill="#28406A" fill-opacity="0.35"/>
+        <circle cx="100" cy="100" r="26" fill="#0E1826"/>
+        <path d="M88 100l8 8 18-18" fill="none" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">EMAIL NOT VERIFIED YET</p>
+    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">A Verification link has send</h1>
+    <p class="text-ink-950/60 max-w-md mx-auto">
+      <span class="font-mono text-ink-950/80"></span>We have already send the link to your mail and it will expire in 5 minites, So go ahead check your mail.
+    </p>
+
+    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      <!-- <a href="{% url 'account:custom_login' %}" class="btn btn-brass px-7 py-3.5 text-sm">Continue to sign in</a> -->
+      <a href="{% url 'shop:product_list' %}" class="btn btn-brass px-7 py-3.5 text-sm">Browse the store</a>
+    </div>
+
+    <p class="text-xs text-ink-950/45 mt-10">
+     didn't request this? Write to <a href="mailto:hello@altas.duckdns.org" class="text-teal-600 hover:text-teal-500">altas.hello@gmail.com</a>.
+    </p>
+  </section>
+{% endif %}
+
+<!-- ============ FOOTER ============ -->
+<footer class="bg-ink-950 text-paper-100/50 mt-auto">
+  <div class="max-w-7xl mx-auto px-5 sm:px-8 py-8 text-xs text-center font-mono">© 2026 Atlas. All rights reserved.</div>
+</footer>
+
+</body>
+</html>

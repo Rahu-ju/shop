@@ -1,0 +1,199 @@
+{% extends "templates/base.html" %}
+{% load static %}
+
+{% block title %}
+  {{ product.name }} — Atlas
+{% endblock %}
+
+{% block content %}
+<p class="font-mono text-xs tracking-[0.15em] text-ink-950/50 max-w-7xl mx-auto px-5 sm:px-8 pt-6">
+  <a href="{% url 'shop:product_list' %}" class="hover:text-ink-950">Home</a> /
+  <a href="{% url 'shop:product_list' %}" class="hover:text-ink-950">Shop</a> /
+  <span>{{ product.name }}</span>
+</p>
+
+<section class="max-w-7xl mx-auto px-5 sm:px-8 py-8 grid md:grid-cols-2 gap-12">
+  <div>
+    {% with all_images=product.images.all %}
+    
+    <div class="gallery relative" data-gallery>
+      <div class="main-frame relative rounded-2xl overflow-hidden bg-paper-100 border border-paper-200 aspect-[4/3]">
+        {% for image in all_images %}
+          <img class="main-img" data-index="{{ forloop.counter0 }}" src="{{ image.image.url }}" alt="{{ product.name }} — photo {{ forloop.counter }}">
+        {% empty %}
+          <img class="main-img" data-index="0" src="{{ product.image.url }}" alt="{{ product.name }}" style="opacity:1;">
+        {% endfor %}
+
+        <!-- show the next and pre button only for more than one image -->
+        {% if all_images|length > 1 %}
+          <button type="button" data-gallery-prev class="arrow-btn arrow-prev" aria-label="Previous image">‹</button>
+          <button type="button" data-gallery-next class="arrow-btn arrow-next" aria-label="Next image">›</button>
+        {% endif %}
+
+        <span data-gallery-counter class="counter-badge"></span>
+      </div>
+
+      <div class="thumbs grid grid-cols-5 gap-2.5 mt-3">
+        {% for image in all_images %}
+          <button type="button" data-index="{{ forloop.counter0 }}" class="thumb-label rounded-lg overflow-hidden aspect-square">
+            <img src="{{ image.image.url }}" alt="{{ product.name }} thumbnail {{ forloop.counter }}">
+          </button>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% endwith %}
+  </div>
+
+  <div>
+    <span class="font-mono text-xs tracking-[0.15em] text-teal-600">{{ product.category.name }}</span>
+    <h1 class="font-display font-bold text-3xl sm:text-4xl mt-2">{{ product.name }}</h1>
+    <p class="text-ink-950/60 mt-2">{{ product.description|truncatechars:60 }}</p>
+    <p class="price-tag font-mono text-3xl mt-6">${{ product.price }}</p>
+
+    <p class="text-sm leading-relaxed text-ink-950/75 mt-6 max-w-md">{{ product.description|linebreaks }}</p>
+
+    <ul class="mt-5 space-y-2 text-sm text-ink-950/75">
+      <li class="flex items-start gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C08A3E" stroke-width="2.2" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Whisper-quiet cooling</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C08A3E" stroke-width="2.2" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Backlit keyboard</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C08A3E" stroke-width="2.2" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Reinforced corners for travel</span>
+      </li>
+      <li class="flex items-start gap-2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#C08A3E" stroke-width="2.2" class="mt-0.5 flex-shrink-0"><path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>1 year national warranty</span>
+      </li>
+    </ul>
+
+    <form action="{% url 'cart:cart_add' product.id %}" method="post" class="mt-8 flex flex-wrap items-center gap-4">
+      {% csrf_token %}
+      <div data-stepper class="flex items-center border border-ink-950 rounded-full overflow-hidden">
+        <button  hx-post="{% url 'cart:cart_add' product.id %}"
+                  hx-headers='{"X-CSRFToken": "{{ csrf_token }}" }'
+                  hx-vals='{"quantity": -1, "override_quantity": true }'
+                  hx-swap="none" type="button" data-step="-1" id="decrease-button" class="stepper-btn !border-0 !w-10 !h-10" aria-label="Decrease quantity">−</button>
+        <input name="quantity" type="number" min="1" max="20" value="{{ product_quantity | default:1 }}" id="quantity" class="w-12 text-center font-mono border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+        <button hx-post="{% url 'cart:cart_add' product.id %}"
+                  hx-headers='{"X-CSRFToken": "{{ csrf_token }}" }'
+                  hx-vals='{"quantity": 1, "override_quantity": true }'
+                  hx-swap="none"
+                  type="button" data-step="1" id="increase-button" class="stepper-btn !border-0 !w-10 !h-10" aria-label="Increase quantity">+</button>
+      </div>
+      <button type="submit" class="btn btn-brass px-8 py-3.5 text-sm">Add to cart</button>
+    </form>
+
+    <div class="mt-8 pt-6 border-t border-paper-200 grid grid-cols-2 gap-4 text-xs text-ink-950/60">
+      <div class="flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C6560" stroke-width="1.8"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3z"/></svg>
+        1-year warranty included
+      </div>
+      <div class="flex items-center gap-2">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2C6560" stroke-width="1.8"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/></svg>
+        Ships nationwide
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-5 sm:px-8 py-14 border-t border-paper-200">
+  <h2 class="font-display font-bold text-xl mb-6">You might also like</h2>
+
+  {% if recommended_products %}
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+    {% for item in recommended_products %}
+      <a href="{{ item.get_absolute_url }}" class="product-card flex flex-col">
+        <div class="aspect-[4/3] overflow-hidden bg-paper-100">
+          <img src="{% if item.image %}{{ item.image.url }}{% else %}data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'><rect width='400' height='300' fill='%23F2ECDC'/><text x='200' y='155' font-family='sans-serif' font-size='14' fill='%237C879A' text-anchor='middle'>Image unavailable</text></svg>{% endif %}" alt="{{ item.name }}" class="w-full h-full object-cover" onerror="this.onerror=null;this.src=window.ATLAS_FALLBACK_IMG">
+        </div>
+        <div class="p-4">
+          <h3 class="font-display font-semibold text-sm">{{ item.name }}</h3>
+          <p class="price-tag font-mono text-sm mt-1">${{ item.price }}</p>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
+    <a href="#" class="product-card flex flex-col">
+      <div class="aspect-[4/3] overflow-hidden bg-paper-100"><img src="https://altas.duckdns.org/media/products/2026/06/05/laptop.jpeg" alt="Xiomi Laptop" class="w-full h-full object-cover" onerror="this.onerror=null;this.src=window.ATLAS_FALLBACK_IMG"></div>
+      <div class="p-4">
+        <h3 class="font-display font-semibold text-sm">Xiomi Laptop</h3>
+        <p class="price-tag font-mono text-sm mt-1">$1,000.00</p>
+      </div>
+    </a>
+    <a href="#" class="product-card flex flex-col">
+      <div class="aspect-[4/3] overflow-hidden bg-paper-100"><img src="https://altas.duckdns.org/media/products/2026/06/05/laptop_GSOgO8T.jpeg" alt="Redmi Laptop" class="w-full h-full object-cover" onerror="this.onerror=null;this.src=window.ATLAS_FALLBACK_IMG"></div>
+      <div class="p-4">
+        <h3 class="font-display font-semibold text-sm">Redmi Laptop</h3>
+        <p class="price-tag font-mono text-sm mt-1">$1,200.00</p>
+      </div>
+    </a>
+    <a href="#" class="product-card flex flex-col">
+      <div class="aspect-[4/3] overflow-hidden bg-paper-100"><img src="https://altas.duckdns.org/media/products/2026/06/05/laptop_YQEsshZ.jpeg" alt="Asus Laptop" class="w-full h-full object-cover" onerror="this.onerror=null;this.src=window.ATLAS_FALLBACK_IMG"></div>
+      <div class="p-4">
+        <h3 class="font-display font-semibold text-sm">Asus Laptop</h3>
+        <p class="price-tag font-mono text-sm mt-1">$1,000.00</p>
+      </div>
+    </a>
+    <a href="#" class="product-card flex flex-col">
+      <div class="aspect-[4/3] overflow-hidden bg-paper-100"><img src="https://altas.duckdns.org/media/products/2026/06/05/laptop_SvNS7gu.jpeg" alt="Mac Laptop" class="w-full h-full object-cover" onerror="this.onerror=null;this.src=window.ATLAS_FALLBACK_IMG"></div>
+      <div class="p-4">
+        <h3 class="font-display font-semibold text-sm">Mac Laptop</h3>
+        <p class="price-tag font-mono text-sm mt-1">$1,400.00</p>
+      </div>
+    </a>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+
+{% block script %}
+<script>
+    function initGallery(root){
+    const images = root.querySelectorAll('.main-img');
+    const thumbs = root.querySelectorAll('.thumbs [data-index]');
+    const counter = root.querySelector('[data-gallery-counter]');
+    const total = images.length;
+    let index = 0;
+
+    function render(){
+      images.forEach((img, i) => img.style.opacity = i === index ? 1 : 0);
+      thumbs.forEach((t, i) => t.classList.toggle('active', i === index));
+      if (counter) counter.textContent = `${index + 1} / ${total}`;
+    }
+    function goTo(i){ index = (i + total) % total; render(); }
+
+    root.querySelector('[data-gallery-prev]')?.addEventListener('click', () => goTo(index - 1));
+    root.querySelector('[data-gallery-next]')?.addEventListener('click', () => goTo(index + 1));
+    thumbs.forEach((t, i) => t.addEventListener('click', () => goTo(i)));
+
+    render();
+  }
+  document.querySelectorAll('[data-gallery]').forEach(initGallery);
+
+  // increase and decrease button handle
+  const increase = document.getElementById("increase-button");
+  const decrease = document.getElementById("decrease-button");
+  const quantity = document.getElementById("quantity");
+
+  function increase_quantity(){
+    quantity.value = parseInt(quantity.value, 10) + 1;
+  }
+
+  function decrease_quantity(){
+    quantity.value = Math.max(1, parseInt(quantity.value, 10) - 1);
+  }
+
+  increase.addEventListener('click', increase_quantity);
+  decrease.addEventListener('click', decrease_quantity);
+
+
+</script>
+{% endblock script%}

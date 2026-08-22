@@ -76,9 +76,9 @@ table.cart img {
     width:180px;
 }
 
-tbody td.num {
+/* tbody td.num {
     text-align:right;
-}
+} */
 
 td input[type="submit"] {
     font-size:12px;
@@ -343,6 +343,6 @@ form p {
     padding-top: 7px;
 }
 
-thead th.num {
+/* thead th.num {
     text-align:right;
-}
+} */

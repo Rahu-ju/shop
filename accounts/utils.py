@@ -8,7 +8,7 @@ def send_verification_email(request, user):
 
     token = user.profile.verification_token
     verification_link = request.build_absolute_uri(
-        reverse('verify_email', kwargs={'token': token})
+        reverse('account:verify_email', kwargs={'token':token})
     )
 
     send_mail(

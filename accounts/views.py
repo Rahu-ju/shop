@@ -1,14 +1,17 @@
 import uuid
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
+from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from django.utils import timezone
 
-from .forms import UserResgistrationForm, CustomAuthForm, UserEditForm, ProfileEditForm
+
+from .forms import SignUpForm, CustomAuthForm, UserEditForm, ProfileEditForm
 from .models import Profile
 from .utils import send_verification_email
+from .models import CustomUser
 
 
 
@@ -18,18 +21,17 @@ def dashboard(request):
 
 
 
-def register(request):
+def signup_view(request):
     if request.method == 'POST':
 
-        # take form data and check its valid or not
-        form = UserResgistrationForm(request.POST)
-        if form.is_valid():
-            new_user = form.save(commit=False)
 
-            # before save, feed the password to the model form
-            new_user.set_password(form.cleaned_data['password'])
-            new_user.is_active = False
-            new_user.save()
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            new_user = CustomUser.objects.create_user(
+                username=form.cleaned_data['username'],
+                email=form.cleaned_data['email'],
+                password=form.cleaned_data['password'],
+            )
 
             # create profile of the new user
             Profile.objects.create(
@@ -43,18 +45,28 @@ def register(request):
 
             messages.info(request, 'Verification link has been sent')
 
-            return render(request, 'accounts/registration_done.html', {'new_user': new_user} )
+            return render(request, 'templates/email_verification.html', {'new_user': new_user, 'send_link': True} )
         else:
-            return render(request, 'accounts/registration.html', {'form': form})
+            return render(request, 'templates/signup.html', {'form': form})
 
     else:
-        form = UserResgistrationForm()
-        return render(request, 'accounts/registration.html', {'form': form})
+        return render(request, 'templates/signup.html')
 
 
 
-class SigninView(LoginView):
-    form_class = CustomAuthForm
+def signin_view(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        print(email, password)
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('shop:home')
+        
+        return render(request, 'templates/login.html', {'error': "invalid credentials"})
+    return render(request, 'templates/login.html')
 
 
 
@@ -92,7 +104,7 @@ def verify_email(request, token):
     if profile.is_token_expired():
 
         messages.error(request, 'Verification link expired!!')
-        return render(request, 'accounts/email_not_verified.html', {'token': token})
+        return render(request, 'templates/email_verification.html', {'token': token, 'token_expired': True,})
     
     # activate the account
     profile.email_verified = True
@@ -101,7 +113,7 @@ def verify_email(request, token):
     profile.save()
     
     messages.info(request, 'Account verified.')
-    return render(request, 'accounts/email_verified.html')
+    return render(request, 'templates/email_verification.html', {'verified': True})
 
 
 
@@ -120,4 +132,4 @@ def resend_email_verification(request, token):
     send_verification_email(request, user)
 
     messages.info(request, 'verification link sent, once again.')
-    return render(request, 'accounts/registration_done.html')    
+    return render(request, 'templates/email_verification.html', {'send_link': True})    

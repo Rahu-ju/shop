@@ -45,7 +45,34 @@ class Product(models.Model):
     
     def get_absolute_url(self):
         return reverse('shop:product_detail', args=[self.id, self.slug])
-    
+
+    @property
+    def primary_image(self):
+        '''It returns the first image of the product, if the product hass mulptiple images. 
+           otherwise it returns the product image. If the product has no image,
+           it returns None.
+        '''
+        first_image = self.images.first()
+        if first_image and first_image.image:
+            return first_image.image
+        if self.image:
+            return self.image
+        return None
+        
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+
+    class Meta:
+        ordering = ['order', 'id']
+
+
+    def __str__(self):
+        return f"{self.product.name}-Image-{self.order}"
     
 
 

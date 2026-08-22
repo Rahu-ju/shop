@@ -1,5 +1,8 @@
+from decimal import Decimal
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 
 from shop.models import Product
 from .cart import Cart
@@ -9,8 +12,45 @@ from .forms import CartAddProductForm
 
 @require_POST
 def cart_add(request, product_id):
+
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
+
+    # this request come from category page
+    if request.headers.get('HX-Request') and not request.POST.get('override_quantity'):
+
+        quantity = int(request.POST.get('quantity'))
+
+        cart.add(   
+            product=product,
+            quantity=quantity,
+            override_quantity=False
+        )
+
+        html = f'<span id="cart_count" hx-swap-oob="true">{len(cart)}</span>'
+        return HttpResponse(html)
+    
+    # This request come from cart detail and product detail page
+    if request.headers.get('HX-Request') and request.POST.get('override_quantity'):
+        quantity = int(request.POST.get('quantity'))
+        cart.add(
+            product=product,
+            quantity=quantity,
+            override_quantity=True
+        )
+        print('this one executed')
+        item = cart.cart[str(product_id)]
+        item_quantity = item['quantity']
+        item_total_price = Decimal(item['price']) * item_quantity
+
+        html = f'''
+        <span id="cart_count" hx-swap-oob="true">{len(cart)}</span>
+        <span id="cart_total" hx-swap-oob="true">${cart.get_total_price()}</span>
+        <span id="item_quantity-{product_id}" hx-swap-oob="true">{item_quantity}</span>
+        <span id="item_total_price-{product_id}" hx-swap-oob="true">${item_total_price}</span>
+        '''
+        return HttpResponse(html)
+
     form = CartAddProductForm(request.POST)
 
     if form.is_valid():
@@ -20,9 +60,9 @@ def cart_add(request, product_id):
             quantity=cf['quantity'],
             override_quantity=cf['override']
         )
+        return redirect('cart:cart_detail')
 
-    return redirect('cart:cart_detail')
-
+    
 
 @require_POST
 def cart_remove(request, product_id):
@@ -45,7 +85,7 @@ def cart_detail(request):
 
 
     context ={'cart': cart}
-    template = 'cart/detail.html'
+    template = 'templates/cart.html'
 
     return render(request, template, context)
 

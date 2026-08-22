@@ -39,12 +39,29 @@ class Cart:
                 'price': str(product.price)
             }
 
+        # if override_quantity:
+        #     self.cart[product_id]['quantity'] = quantity
+        #     self.save()
+        # else:
+        #     self.cart[product_id]['quantity'] += quantity
+        #     self.save()
+
         if override_quantity:
-            self.cart[product_id]['quantity'] = quantity
-            self.save()
+            if self.cart[product_id]['quantity'] == 1 and quantity == -1:
+                pass
+            elif quantity > 1:
+                self.cart[product_id]['quantity'] = quantity
+                self.save()
+            else:
+                self.cart[product_id]['quantity'] += quantity
+                self.save()
         else:
-            self.cart[product_id]['quantity'] += quantity
-            self.save()
+            if quantity > 1:
+                self.cart[product_id]['quantity'] = quantity
+                self.save()
+            else:
+                self.cart[product_id]['quantity'] += quantity
+                self.save()
 
 
     def remove(self, product):
@@ -91,6 +108,13 @@ class Cart:
             Decimal(item['price']) * item['quantity'] 
             for item in self.cart.values()
             )
+
+    def get_product_quantity(self, product_id):
+        ''' return Single product's quantity'''
+        
+        if self.cart.get(str(product_id)):
+            return self.cart[str(product_id)]['quantity']
+        
     
 
     def clear(self):

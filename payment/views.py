@@ -55,15 +55,22 @@ def payment_process(request):
 
         return redirect(session.url, 303)
 
-    return render(request, 'payment/process.html', locals())
+    # return render(request, 'payment/process.html', locals())
+    return render(request, 'templates/order-summary.html', locals())
 
 
 def payment_completed(request):
-    return render(request, 'payment/completed.html')
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    context = {'order': order}
+    return render(request, 'templates/order-success.html', context)
 
 
 def payment_canceled(request):
-    return render(request, 'payment/canceled.html')
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    context = {'order': order}
+    return render(request, 'templates/order-cancel.html', context)
 
 
 
@@ -73,10 +80,15 @@ def get_bkash():
 
 
 def bkash_payment_initiate(request):
-    
+    #get the order id from session, and retrieve the order object from database
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+
+
     if request.method == 'POST':
-        amount = request.POST.get('amount')
-        order_id = request.POST.get('order_id')
+        # amount = request.POST.get('amount')
+        amount = order.get_total_cost()
+        # order_id = request.POST.get('order_id')
 
         result = get_bkash().create_payment(amount, order_id)
 
@@ -84,6 +96,8 @@ def bkash_payment_initiate(request):
             return redirect(result['bkashURL'])  # redirect to bKash payment page
         else:
             return JsonResponse({'error': result}, status=400)
+
+    return render(request, 'templates/order-summary.html', locals())
 
 
 def bkash_payment_callback(request):
@@ -99,14 +113,13 @@ def bkash_payment_callback(request):
             order_id = result.get('merchantInvoiceNumber')
             trx_id = result.get('trxID')
 
-            try:
-                order = Order.objects.get(id=order_id)
-                order.paid = True
-                order.bkash_trx_id = trx_id
-                order.save()
-            except Order.DoesNotExist:
-                return render(request, 'payment/canceled.html', {'result': result})
+            # save to databse
+            order = Order.objects.get(id=order_id)
+            order.paid = True
+            order.bkash_trx_id = trx_id
+            order.save()
 
-            return render(request, 'payment/completed.html', {'result': result})
+            # return render(request, 'templates/order-success.html', {'result': result})
+            return redirect('payment:completed')
 
-    return render(request, 'payment/canceled.html')
+    return redirect('payment:canceled')

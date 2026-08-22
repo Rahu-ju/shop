@@ -36,16 +36,19 @@ def order_create(request):
 
             # set order id to session and then redirect to the payment process
             request.session['order_id'] = order.id
-            return redirect('payment:process')
 
+            # if request.POST.get('payment') == 'stripe':
+            #     return redirect('payment:stripe_payment')
+            # if request.POST.get('payment') == 'bkash':
+            #     return redirect('payment:bkash_payment')
 
-            # template = 'orders/created.html'
-            # context = {'order': order, }
-            # return render(request, template, context)
+            template = 'templates/order-summary.html'
+            context = {'order': order, }
+            return render(request, template, context)
         
         else:
             # template can catch the error using form.error
-            template = 'orders/create.html'
+            template = 'templates/checkout.html'
             context = {'form': form, 'cart': cart,}
             return render(request, template, context)
 
@@ -54,10 +57,17 @@ def order_create(request):
             form = OrderCreationForm(instance=request.user)
         else:
             form = OrderCreationForm()
-        template = 'orders/create.html'
+        template = 'templates/checkout.html'
         context = {'form': form, 'cart': cart}
         return render(request, template, context)
 
+
+
+def order_summary(request):
+    order_id = request.session.get('order_id')
+    order = get_object_or_404(Order, id=order_id)
+    context = {'order': order}
+    return render(request, 'templates/order-summary.html', context)
 
 
 @staff_member_required

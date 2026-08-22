@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
-    # accounts app placed here for using this app's templates not django.contrib.admin tempaltes
+    # accounts app placed here for using this app's templates not django.contrib.admin templates
     'accounts.apps.AccountsConfig',
 
     'django.contrib.admin',
@@ -65,7 +65,7 @@ ROOT_URLCONF = 'shop_root.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'assets'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,6 +133,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static_root/'
 
+# Additional locations of static files
+STATICFILES_DIRS = [
+    BASE_DIR / 'assets/',
+]
+
 # for user uploaded file
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media_root/'
@@ -144,7 +149,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Customize settings below except static file
-LOGIN_REDIRECT_URL = '/'
+AUTH_USER_MODEL = 'accounts.CustomUser'
+# LOGIN_REDIRECT_URL = '/'
 # LOGOUT_REDIRECT_URL = '/'
 
 # Cart using session
@@ -171,7 +177,7 @@ STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
 # Authentication backends
 AUTHENTICATION_BACKENDS = [
  'django.contrib.auth.backends.ModelBackend',
- 'accounts.authentication.EmailAuthBackend',
+#  'accounts.authentication.EmailAuthBackend',
 ]
 
 # Celery broker url

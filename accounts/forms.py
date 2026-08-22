@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 
@@ -9,7 +9,9 @@ from .models import Profile
 
 
 
-class UserResgistrationForm(forms.ModelForm):
+User = get_user_model()
+
+class SignUpForm(forms.ModelForm):
     '''
     when form.is_valid() function is called then all the methods of this class will 
     called and raise error accordingly if any.
@@ -19,33 +21,25 @@ class UserResgistrationForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ['username', 'first_name', 'email']
+        fields = ['username', 'email']
 
-    def clean_password2(self):
+    def clean_password(self):
         '''
         This method raise error if two password are not matched.
         '''
-        cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError("Your Passwords don't match")
-        return cd['password2']
+        password = self.data.get('password')
+        password2 = self.data.get('password2')
+        if password != password2:
+            raise forms.ValidationError('Passwords do not match.')
+        validate_password(password)
+        return password
     
-    def clean_email(self):
-        '''
-        This method raise error if the new user's email already in the databse.
-        '''
-        email_data = self.cleaned_data['email']
-        qs = User.objects.filter(email=email_data)
-
-        if qs.exists():
-            raise forms.ValidationError('Email already in use')
-        return email_data
 
 
 
 class CustomAuthForm(AuthenticationForm):
     '''
-    The idea is when user is inactive and not verified their email then it raise 
+    The idea is when user is inactive and not verified their email, then it raise 
     validatione error with with message to show the user.
 
     So in this case authenticate method inside clean method will rasie error for in active user
@@ -78,7 +72,7 @@ class CustomAuthForm(AuthenticationForm):
 class UserEditForm(forms.ModelForm):
     class Meta:
         model = get_user_model()
-        fields = ['first_name', 'last_name', 'email']
+        fields = ['username', 'email']
 
     def clean_email(self):
         '''

@@ -22,6 +22,9 @@ server {
     location / {
         include         /etc/nginx/uwsgi_params;
         uwsgi_pass      uwsgi_app;
+
+        # For file upload
+        client_max_body_size 100M;
     }
 
     location /static/ {

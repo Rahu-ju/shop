@@ -2,13 +2,12 @@ import uuid
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.utils import timezone
 
 
-from .forms import SignUpForm, CustomAuthForm, UserEditForm, ProfileEditForm
+from .forms import SignUpForm, UserEditForm, ProfileEditForm
 from .models import Profile
 from .utils import send_verification_email
 from .models import CustomUser
@@ -17,16 +16,19 @@ from .models import CustomUser
 
 def dashboard(request):
     dashboard = None
-    return render(request, 'accounts/dashboard.html', {'dashboard': dashboard} )
+    return render(request, 'templates/dashboard.html', {'dashboard': dashboard} )
 
 
 
 def signup_view(request):
     if request.method == 'POST':
 
-
+        # Feed the post  data to the user
         form = SignUpForm(request.POST)
+
         if form.is_valid():
+
+            # Create the new user and by default is_active False
             new_user = CustomUser.objects.create_user(
                 username=form.cleaned_data['username'],
                 email=form.cleaned_data['email'],
@@ -43,6 +45,7 @@ def signup_view(request):
             # send a mail for verification link
             send_verification_email(request, new_user)
 
+            # Send message
             messages.info(request, 'Verification link has been sent')
 
             return render(request, 'templates/email_verification.html', {'new_user': new_user, 'send_link': True} )
@@ -56,11 +59,15 @@ def signup_view(request):
 
 def signin_view(request):
     if request.method == "POST":
+
+        # getting the user info from post data
         email = request.POST.get('email')
         password = request.POST.get('password')
 
-        print(email, password)
+        # Authenticate the user
         user = authenticate(request, username=email, password=password)
+
+        # log the user in
         if user is not None:
             login(request, user)
             return redirect('shop:home')
@@ -68,6 +75,14 @@ def signin_view(request):
         return render(request, 'templates/login.html', {'error': "invalid credentials"})
     return render(request, 'templates/login.html')
 
+
+
+def signout_view(request):
+
+    # let the user to logout
+    logout(request)
+
+    return redirect('shop:home')
 
 
 

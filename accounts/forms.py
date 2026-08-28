@@ -33,6 +33,13 @@ class SignUpForm(forms.ModelForm):
             raise forms.ValidationError('Passwords do not match.')
         validate_password(password)
         return password
+
+    def clean_email(self):
+        email = User.objects.get(email=self.data.get('email'))
+
+        if email:
+            raise forms.ValidationError('Email already exist')
+        return email
     
 
 

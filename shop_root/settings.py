@@ -73,6 +73,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                # making the cart available
                 'cart.context_processors.cart',
             ],
         },
@@ -131,6 +133,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# ---------------- Custom settings -----------------#
+
+# The directory where collectstaticfile collect static files
 STATIC_ROOT = BASE_DIR / 'static_root/'
 
 # Additional locations of static files
@@ -142,22 +154,13 @@ STATICFILES_DIRS = [
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media_root/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# Customize settings below except static file
+# To use Custom user model
 AUTH_USER_MODEL = 'accounts.CustomUser'
-# LOGIN_REDIRECT_URL = '/'
-# LOGOUT_REDIRECT_URL = '/'
 
 # Cart using session
-# To store the cart in the session below key is used
 CART_SESSION_ID = 'cart'
 
-#Emailbackend for now to the console
+# Configuration for sending email
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
@@ -173,12 +176,6 @@ else:
 STRIPE_PUBLISHABLE_KEY = config('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET')
-
-# Authentication backends
-AUTHENTICATION_BACKENDS = [
- 'django.contrib.auth.backends.ModelBackend',
-#  'accounts.authentication.EmailAuthBackend',
-]
 
 # Celery broker url
 CELERY_BROKER_URL = config('CELERY_BROKER_URL')

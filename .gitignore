@@ -20,5 +20,8 @@ db.sqlite3
 # OS
 .DS_Store
 
+# For static files
+static_root
+
 # media file test purposes
 media_root/

@@ -13,8 +13,9 @@ python manage.py collectstatic --noinput --clear
 sudo usermod -aG docker $USER
 
 
-'''  To generate ssl key and cirtificate   '''
+'''  To generate ssl key and cirtificate   for local environment'''
 openssl req -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes \
 -keyout ssl/shop.key -out ssl/shop.crt \
--subj '/CN=*.altas.com' \
--addext 'subjectAltName=DNS:*.altas.com'
+-subj '/CN=localhost' \
+-addext 'subjectAltName=DNS:localhost'
+

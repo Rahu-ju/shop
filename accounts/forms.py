@@ -35,11 +35,12 @@ class SignUpForm(forms.ModelForm):
         return password
 
     def clean_email(self):
-        email = User.objects.get(email=self.data.get('email'))
-
-        if email:
-            raise forms.ValidationError('Email already exist')
+        # checking if email already in db
+        email = self.cleaned_data.get('email')
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('This Email already exist!!')
         return email
+        
     
 
 

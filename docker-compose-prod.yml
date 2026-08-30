@@ -12,6 +12,8 @@ services:
     volumes:
       - ./config/nginx:/etc/nginx/templates
       - .:/app
+      - /etc/letsencrypt/live/altas.duckdns.org/fullchain.pem:/app/ssl/shop.crt:ro
+      - /etc/letsencrypt/live/altas.duckdns.org/privkey.pem:/app/ssl/shop.key:ro
     ports:
       - "80:80"
       - "443:443"

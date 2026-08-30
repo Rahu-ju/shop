@@ -26,8 +26,8 @@ jobs:
             sudo chown -R $USER:$USER data/
             sudo chown -R 33:33 media_root
             sudo certbot renew --quiet
-            sudo cp /etc/letsencrypt/live/altas.duckdns.org/fullchain.pem ssl/shop.crt
-            sudo cp /etc/letsencrypt/live/altas.duckdns.org/privkey.pem ssl/shop.key
+            # sudo cp /etc/letsencrypt/live/altas.duckdns.org/fullchain.pem ssl/shop.crt
+            # sudo cp /etc/letsencrypt/live/altas.duckdns.org/privkey.pem ssl/shop.key
             sudo chown -R $USER:$USER ssl/
             docker compose -f docker-compose-prod.yml down
             docker compose -f docker-compose-prod.yml up -d --build

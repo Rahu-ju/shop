@@ -63,8 +63,8 @@
 
     <div class="flex items-center gap-3">
       {% if user.is_authenticated %}
-        <a href="{% url 'account:dashboard' %}" class="w-10 h-10 rounded-full bg-brass-500 text-ink-950 font-display font-bold flex items-center justify-center text-sm" aria-label="Account">RA</a>
-        <a href="{% url 'account:dashboard' %}" class="hidden sm:inline-block font-display text-sm tracking-wide nav-link">{{ user.username }}</a>
+        <a href="{% url 'shop:dashboard' %}" class="w-10 h-10 rounded-full bg-brass-500 text-ink-950 font-display font-bold flex items-center justify-center text-sm" aria-label="Account">RA</a>
+        <a href="{% url 'shop:dashboard' %}" class="hidden sm:inline-block font-display text-sm tracking-wide nav-link">{{ user.username }}</a>
         <a href="{% url 'account:custom_logout' %}" class="hidden sm:inline-block font-display text-sm tracking-wide nav-link">logout</a>
       {% else %}
         <a href="{% url 'account:custom_login' %}" class="hidden sm:inline-block font-display text-sm tracking-wide nav-link">Login</a>

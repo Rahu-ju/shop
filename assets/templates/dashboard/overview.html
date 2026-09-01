@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'static/style.css' %}">
 <script src="{% static 'static/tailwind.js' %}"></script>
+<script src="{% static 'static/htmx.min.js' %}"></script>
 <script>
   tailwind.config = {
     theme: { extend: {
@@ -73,26 +74,26 @@
       </div>
 
       <nav class="flex flex-col gap-1 font-display text-sm">
-        <a href="#" data-active="true" class="dash-nav-link">
+        <a href="{% url 'shop:dashboard' %}" data-active="true" class="dash-nav-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg>
           Overview
         </a>
-        <a href="#" class="dash-nav-link">
+        <a href="{% url 'shop:dashboard' %}" class="dash-nav-link" hx-get="{% url 'shop:dashboard' %}" hx-target="#main-content" hx-vals='{"order_tab": "order_tabs"}'>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7zM6.5 19.5a2 2 0 100-4 2 2 0 000 4zM17.5 19.5a2 2 0 100-4 2 2 0 000 4z"/></svg>
           Orders
         </a>
-        <a href="#" class="dash-nav-link">
+        <!-- <a href="#" class="dash-nav-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-5.5-9.5-9.5C.5 8 2 4 6 4c2 0 3.5 1.2 4 2.5C10.5 5.2 12 4 14 4c4 0 5.5 4 3.5 7.5C19 15.5 12 21 12 21z"/></svg>
           Saved laptops
-        </a>
-        <a href="#" class="dash-nav-link">
+        </a> -->
+        <a href="{% url 'shop:dashboard' %}" class="dash-nav-link" hx-get="{% url 'shop:dashboard' %}" hx-target="#main-content" hx-vals='{"address_tab": "address_tabs"}'>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"/></svg>
           Delivery addresses
         </a>
-        <a href="#" class="dash-nav-link">
+        <!-- <a href="#" class="dash-nav-link">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4.5 5-6 8-6s6.5 1.5 8 6"/></svg>
           Account settings
-        </a>
+        </a> -->
         <a href="index.html" class="dash-nav-link text-rust-500 mt-2 pt-3 border-t border-paper-200">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" stroke-linecap="round" stroke-linejoin="round"/></svg>
           Sign out
@@ -101,7 +102,7 @@
     </aside>
 
     <!-- ============ MAIN CONTENT ============ -->
-    <div class="space-y-8">
+    <div class="space-y-8" id="main-content">
 
       <!-- Stat cards -->
       <div class="grid sm:grid-cols-3 gap-5">
@@ -189,6 +190,14 @@
     background:var(--ink-950); color:var(--paper-50); opacity:1;
   }
 </style>
+<script>
+    document.querySelectorAll('.dash-nav-link').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelectorAll('.dash-nav-link').forEach(c => c.removeAttribute('data-active'));
+      link.setAttribute('data-active', 'true');
+    });
+  });
+</script>
 
 </body>
 </html>

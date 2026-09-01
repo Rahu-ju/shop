@@ -14,12 +14,6 @@ from .models import CustomUser
 
 
 
-def dashboard(request):
-    dashboard = None
-    return render(request, 'templates/dashboard.html', {'dashboard': dashboard} )
-
-
-
 def signup_view(request):
     if request.method == 'POST':
 

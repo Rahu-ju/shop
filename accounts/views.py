@@ -5,11 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 from django.contrib import messages
 from django.utils import timezone
-
+from django.urls import reverse
 
 from .forms import SignUpForm, UserEditForm, ProfileEditForm
 from .models import Profile
-from .utils import send_verification_email
+from .task import send_verification_email
 from .models import CustomUser
 
 
@@ -36,14 +36,19 @@ def signup_view(request):
             )
 
             # create profile of the new user
-            Profile.objects.create(
+            user_profile = Profile.objects.create(
                 user=new_user, 
                 verification_token=uuid.uuid4(), 
                 token_created_at=timezone.now()
             )
 
-            # send a mail for verification link
-            send_verification_email(request, new_user)
+            # send a mail with a verification link via celery
+            token = user_profile.verification_token
+            email = new_user.email
+            verification_link = request.build_absolute_uri(
+                reverse('account:verify_email', kwargs={'token': token})
+                )
+            send_verification_email.delay(verification_link, email)
 
             # Send message
             messages.info(request, 'Verification link has been sent')

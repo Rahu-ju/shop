@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 
 from .models import Category, Product
 from cart.forms import  CartAddProductForm
@@ -60,4 +61,21 @@ def product_detail(request, id, slug):
     template = 'templates/product-detail.html'
 
     return render(request, template, context)
+
+
+
+def dashboard(request):
+    dashboard = None
+
+    # render orders snipets
+    if request.headers.get('HX-Request') and request.GET.get('order_tab'):
+        html = 'templates/dashboard/orders.html'
+        return render(request, html)
+
+    # render address snipets
+    if request.headers.get('HX-Request') and request.GET.get('address_tab'):
+        html = 'templates/dashboard/address.html'
+        return render(request, html)
+    
+    return render(request, 'templates/dashboard/overview.html', {'dashboard': dashboard} )
 

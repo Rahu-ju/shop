@@ -40,9 +40,35 @@ class SignUpForm(forms.ModelForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError('This Email already exist!!')
         return email
-        
-    
 
+
+
+class SignInForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+
+    def clean(self):
+        ''' if basic validation failled then return, otherwise check credentials.'''
+
+        # Basic validation is done by parent class, so we call it first
+        cleaned_data = super().clean()
+        if self.errors:
+            return cleaned_data
+
+        # Now checking credentials
+        email = cleaned_data['email']
+        password = cleaned_data['password']
+
+        try:
+            user = User.objects.get(email=email)
+            if not user.check_password(password):
+                self.add_error("password", "Your password is not matched.")
+        except User.DoesNotExist:
+            self.add_error("email", "You are not use this mail to sign up")
+            return cleaned_data
+        # view can use this user. Don't need to check the DB again.
+        cleaned_data['user'] = user
+        return cleaned_data
 
 
 class CustomAuthForm(AuthenticationForm):

@@ -61,7 +61,7 @@
     <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">EMAIL VERIFIED</p>
     <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">Your mail is verified now.</h1>
     <p class="text-ink-950/60 max-w-md mx-auto">
-      <span class="font-mono text-ink-950/80">rahu@example.com</span> is now verified. Your Atlas account is fully active — you're ready to check out faster and track orders going forward.
+      <span class="font-mono text-ink-950/80">{{ email }}</span> is now verified. Your Atlas account is fully active — you're ready to check out faster and track orders going forward.
     </p>
 
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -75,7 +75,7 @@
   </section>
 {% endif %}
 
-{% if token_expired %}
+{% if not verified %}
   <section class="max-w-2xl mx-auto px-5 sm:px-8 py-16 flex-1 w-full text-center">
     <div class="relative w-32 h-32 mx-auto mb-8">
       <svg viewBox="0 0 200 200" class="w-full h-full">
@@ -89,13 +89,15 @@
     </div>
 
     <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">EMAIL NOT VERIFIED</p>
-    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">Your verifiction link has expired.</h1>
+    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">{{ headline }}</h1>
     <p class="text-ink-950/60 max-w-md mx-auto">
-      <span class="font-mono text-ink-950/80">Hello, </span>You can again try to resend it.
+      <span class="font-mono text-ink-950/80">Hello, {{ username }} </span>{{ message }}
     </p>
 
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
+      {% if token %}
       <a href="{% url 'account:resend_email' token %}" class="btn btn-brass px-7 py-3.5 text-sm">Resend verification link</a>
+      {% endif %}
       <a href="{% url 'shop:product_list' %}" class="btn btn-ghost-ink px-7 py-3.5 text-sm">Browse the store</a>
     </div>
 
@@ -119,10 +121,10 @@
       </svg>
     </div>
 
-    <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">EMAIL NOT VERIFIED YET</p>
-    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">A Verification link has send</h1>
+    <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">Verify your email</p>
+    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">A Verification link has been sent</h1>
     <p class="text-ink-950/60 max-w-md mx-auto">
-      <span class="font-mono text-ink-950/80"></span>We have already send the link to your mail and it will expire in 5 minites, So go ahead check your mail.
+      <span class="font-mono text-ink-950/80">{{ username }}</span>, We have already sent the link to your mail and it will expire in 5 minutes, So go ahead check your mail.
     </p>
 
     <div class="mt-10 flex flex-wrap items-center justify-center gap-4">

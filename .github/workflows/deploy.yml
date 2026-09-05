@@ -1,9 +1,12 @@
+## GCE_HOST, GCE_USERNAME, GCE_KEY AND ENV_PROD is need to deploy in GCE
+
 name: Deploy to GCE
 
 on:
   push:
     branches:
-      - master
+    # uncomment this to deploy to GCP
+      #- master
 
 jobs:
   deploy:

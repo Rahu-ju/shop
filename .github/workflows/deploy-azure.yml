@@ -1,0 +1,38 @@
+name: Deploy to Azure Compute engine
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.AZURE_HOST }}
+          username: ${{ secrets.AZURE_USERNAME }}
+          key: ${{ secrets.AZURE_SSH_KEY }}
+          port: ${{ secrets.AZURE_PORT }}
+          script: |
+            cd ~/shop
+            git pull origin master
+            echo "${{ secrets.ENV_PROD }}" > .env.prod
+
+            sudo chown -R $USER:$USER data/
+            sudo chown -R 33:33 media_root
+            sudo certbot renew --quiet
+  
+            sudo chown -R $USER:$USER ssl/
+            
+            docker compose -f docker-compose-prod.yml down
+            docker compose -f docker-compose-prod.yml up -d --build
+            docker compose -f docker-compose-prod.yml exec -T web python manage.py makemigrations
+            docker compose -f docker-compose-prod.yml exec -T web python manage.py migrate
+            docker compose -f docker-compose-prod.yml exec -T web python manage.py collectstatic --noinput

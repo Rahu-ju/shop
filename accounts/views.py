@@ -44,8 +44,13 @@ def signup_view(request):
                 )
             send_verification_email.delay(verification_link, email)
 
-            messages.info(request, 'Verification link has been sent')
-            return render(request, 'templates/email_verification.html', {'username': new_user.username, 'send_link': True} )
+            context = {
+                'username': new_user.username,
+                'verified': False,
+                'headline': 'Account created successfully',
+                'message': 'We have sent a verification link to your mail. Please check your mail and verify your account.'
+            }
+            return render(request, 'templates/email_verification.html', context)
         else:
             return render(request, 'templates/signup.html', {'form': form})
 
@@ -83,7 +88,6 @@ def signin_view(request):
                 return render(request, 'templates/email_verification.html', context)
             else:
                 context = { 'verified': False,
-                            'token': user.profile.verification_token,
                             'username': user.username,
                             'headline': 'Email not verified yet',
                             'message': 'You are not verified yet, Check your mail, we already sent the verification link.'

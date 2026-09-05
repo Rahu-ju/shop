@@ -13,6 +13,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Test raw TCP connectivity to port 22
+        run: nc -zv -w10 ${{ secrets.AZURE_HOST }} 22
+
       - name: Deploy to server
         uses: appleboy/ssh-action@v1
         with:

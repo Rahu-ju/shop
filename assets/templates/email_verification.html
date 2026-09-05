@@ -108,35 +108,6 @@
 
 {% endif %}
 
-{% if send_link %}
-  <section class="max-w-2xl mx-auto px-5 sm:px-8 py-16 flex-1 w-full text-center">
-    <div class="relative w-32 h-32 mx-auto mb-8">
-      <svg viewBox="0 0 200 200" class="w-full h-full">
-        <circle cx="100" cy="100" r="92" fill="none" stroke="#E7DEC7" stroke-width="1.5"/>
-        <circle cx="100" cy="100" r="70" fill="none" stroke="#E7DEC7" stroke-width="1"/>
-        <polygon points="100,44 106,100 100,108 94,100" fill="#C08A3E"/>
-        <polygon points="100,156 106,100 100,92 94,100" fill="#28406A" fill-opacity="0.35"/>
-        <circle cx="100" cy="100" r="26" fill="#0E1826"/>
-        <path d="M88 100l8 8 18-18" fill="none" stroke="#FBF8F1" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-
-    <p class="font-mono text-xs tracking-[0.2em] text-teal-600 mb-3">Verify your email</p>
-    <h1 class="font-display font-bold text-3xl sm:text-4xl mb-3">A Verification link has been sent</h1>
-    <p class="text-ink-950/60 max-w-md mx-auto">
-      <span class="font-mono text-ink-950/80">{{ username }}</span>, We have already sent the link to your mail and it will expire in 5 minutes, So go ahead check your mail.
-    </p>
-
-    <div class="mt-10 flex flex-wrap items-center justify-center gap-4">
-      <!-- <a href="{% url 'account:custom_login' %}" class="btn btn-brass px-7 py-3.5 text-sm">Continue to sign in</a> -->
-      <a href="{% url 'shop:product_list' %}" class="btn btn-brass px-7 py-3.5 text-sm">Browse the store</a>
-    </div>
-
-    <p class="text-xs text-ink-950/45 mt-10">
-     didn't request this? Write to <a href="mailto:hello@altas.duckdns.org" class="text-teal-600 hover:text-teal-500">altas.hello@gmail.com</a>.
-    </p>
-  </section>
-{% endif %}
 
 <!-- ============ FOOTER ============ -->
 <footer class="bg-ink-950 text-paper-100/50 mt-auto">

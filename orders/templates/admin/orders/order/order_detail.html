@@ -36,19 +36,21 @@
 
             <tr>
                 <th>Customer</th>
-                <td>{{ order.first_name }} {{ order.last_name }}</td>
+                <td>{{ order.address.name }}</td>
             </tr>
 
             <tr>
                 <th>E-mail</th>
-                <td><a href="mailto:{{ order.email }}">{{ order.email }}</a></td>
+                <td><a href="mailto:{{ order.address.email }}">{{ order.address.email }}</a></td>
             </tr>
 
             <tr>
                 <th>Address</th>
                 <td>
-                {{ order.address }},
-                {{ order.postal_code }} {{ order.city }}
+                {{ order.address.phone }}<br>
+                {{ order.address.city }}<br>
+                {{ order.address.address}}<br>
+                {{ order.address.postal_code }}<br>
                 </td>
             </tr>
 

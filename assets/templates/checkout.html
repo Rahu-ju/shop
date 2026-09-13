@@ -21,32 +21,32 @@
       <div class="grid sm:grid-cols-2 gap-5">
         <div>
           <label class="font-mono text-xs tracking-wide text-ink-950/60 block mb-1.5" for="your-name">Your name</label>
-          <input id="your-name" name="name" required type="text" placeholder="Your name" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
+          <input id="your-name" name="name" {% if form.name.value %} value="{{ form.name.value }}" {% endif %} required type="text" placeholder="Your name" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
         </div>
         <div>
           <label class="font-mono text-xs tracking-wide text-ink-950/60 block mb-1.5" for="phone">Phone number</label>
-          <input id="phone" name="phone" required type="tel" placeholder="01XXXXXXXXX" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
+          <input id="phone" name="phone" {% if form.phone.value %} value="{{ form.phone.value }}" {% endif %} required type="tel" placeholder="01XXXXXXXXX" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
         </div>
       </div>
 
       <div>
         <label class="font-mono text-xs tracking-wide text-ink-950/60 block mb-1.5" for="email">Email</label>
-        <input id="email" name="email" required type="email" placeholder="you@example.com" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
+        <input id="email" name="email" {% if form.email.value %} value="{{ form.email.value }}" {% endif %} required type="email" placeholder="you@example.com" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
       </div>
 
       <div>
         <label class="font-mono text-xs tracking-wide text-ink-950/60 block mb-1.5" for="address">Delivery address</label>
-        <input id="address" name="address" required type="text" placeholder="House, road, area" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
+        <input id="address" name="address" {% if form.address.value %} value="{{ form.address.value }}" {% endif %} required type="text" placeholder="House, road, area" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
       </div>
 
       <div class="grid sm:grid-cols-2 gap-5">
         <div>
           <label class="font-mono text-xs tracking-wide text-ink-950/60 block mb-1.5" for="city">City</label>
-          <input id="city" name="city" required type="text" placeholder="Dhaka" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
+          <input id="city" name="city" {% if form.city.value %} value="{{ form.city.value }}" {% endif %} required type="text" placeholder="Dhaka" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
         </div>
         <div>
           <label class="font-mono text-xs tracking-wide text-ink-950/60 block mb-1.5" for="postcode">Postcode</label>
-          <input id="postcode" name="postal_code" type="text" placeholder="1207" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
+          <input id="postcode" name="postal_code" {% if form.postal_code.value %} value="{{ form.postal_code.value }}" {% endif %} type="text" placeholder="1207" class="w-full rounded-lg border border-ink-950/25 px-4 py-3 text-sm focus:border-teal-600 focus:ring-1 focus:ring-teal-600 outline-none">
         </div>
       </div>
 

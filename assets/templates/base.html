@@ -115,9 +115,9 @@
     <div>
       <p class="font-mono text-xs tracking-[0.15em] text-brass-400 mb-4">SHOP</p>
       <ul class="space-y-2.5 text-sm text-paper-100/75">
-        <li><a href="products.html" class="hover:text-paper-50">All Categories</a></li>
-        <li><a href="cart.html" class="hover:text-paper-50">Your cart</a></li>
-        <li><a href="login.html" class="hover:text-paper-50">Login / account</a></li>
+        <li><a href="{% url 'shop:product_list' %}" class="hover:text-paper-50">All Categories</a></li>
+        <li><a href="{% url 'cart:cart_detail' %}" class="hover:text-paper-50">Your cart</a></li>
+        <li><a href="{% url 'account:custom_login' %}" class="hover:text-paper-50">Login / account</a></li>
       </ul>
     </div>
     <div>

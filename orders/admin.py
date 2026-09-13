@@ -19,10 +19,14 @@ class OrderItemInline(admin.TabularInline):
 def order_payment(obj):
     url = obj.get_stripe_url()
     if obj.stripe_id:
-        html = f'<a href="{url}" target="_blank">{obj.stripe_id}</a>'
+        html = f'<a href="{url}" target="_blank">stripe-{obj.stripe_id}</a>'
         return mark_safe(html)
+    if obj.bkash_trx_id:
+        html = f'<a href="https://www.bkash.com/transactions/{obj.bkash_trx_id}" target="_blank">bkash-{obj.bkash_trx_id}</a>'
+        return mark_safe(html)
+    
     return ''
-order_payment.short_description = 'stripe payment'
+order_payment.short_description = 'Payment type'
 
 
 
@@ -87,12 +91,7 @@ def order_pdf(obj):
 class OrderAdmin(admin.ModelAdmin):
     list_display = [
         'id',
-        'first_name',
-        'last_name',
-        'email',
         'address',
-        'postal_code',
-        'city',
         'paid',
         order_payment,
         'bkash_trx_id',

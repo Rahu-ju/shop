@@ -6,7 +6,7 @@ from django.contrib.staticfiles import finders
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 
-from .forms import OrderCreationForm
+from .forms import AddressCreationForm
 from .models import OrderItem, Order
 from .task import order_created
 from cart.cart import Cart
@@ -16,11 +16,22 @@ from cart.cart import Cart
 def order_create(request):
     cart = Cart(request)
     if request.method == 'POST':
-        form = OrderCreationForm(request.POST)
+        form = AddressCreationForm(request.POST)
         
         if form.is_valid():
-            order = form.save()
 
+            # create the address and save it to the database
+            address = form.save(commit=False)
+            if request.user.is_authenticated:
+                address.user = request.user
+            address.save()
+
+            # create the order and save it to the database
+            order = Order.objects.create(
+                user=request.user if request.user.is_authenticated else None,
+                address=address,
+            )
+            
             # Take each item from the cart and create the order item.
             for item in cart:
                 OrderItem.objects.create(
@@ -30,17 +41,12 @@ def order_create(request):
                     quantity = item['quantity']
                 )
             
-            #Clear the cart and initiate asynchronous task
+            #Clear the cart and send mail asynchronously
             cart.clear()
             order_created.delay(order.id)
 
             # set order id to session and then redirect to the payment process
             request.session['order_id'] = order.id
-
-            # if request.POST.get('payment') == 'stripe':
-            #     return redirect('payment:stripe_payment')
-            # if request.POST.get('payment') == 'bkash':
-            #     return redirect('payment:bkash_payment')
 
             template = 'templates/order-summary.html'
             context = {'order': order, }
@@ -54,9 +60,10 @@ def order_create(request):
 
     else:
         if request.user.is_authenticated:
-            form = OrderCreationForm(instance=request.user)
+            address = request.user.address 
+            form = AddressCreationForm(instance=address)
         else:
-            form = OrderCreationForm()
+            form = AddressCreationForm()
         template = 'templates/checkout.html'
         context = {'form': form, 'cart': cart}
         return render(request, template, context)

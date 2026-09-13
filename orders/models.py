@@ -3,14 +3,24 @@ from django.conf import settings
 
 
 
-class Order(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=20, default='')
+class Address(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    name = models.CharField(max_length=30)
     email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    city = models.CharField(max_length=100)
     address = models.CharField(max_length=250)
     postal_code = models.CharField(max_length=20)
-    city = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.city
+    
+
+
+
+class Order(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
+    address = models.ForeignKey(Address, related_name='orders', on_delete=models.CASCADE)
     created = models.DateField(auto_now_add=True)
     updated = models.DateField(auto_now=True)
     paid = models.BooleanField(default=False)

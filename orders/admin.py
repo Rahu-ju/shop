@@ -6,7 +6,7 @@ from django.utils.safestring import mark_safe
 from django.http import HttpResponse
 from django.urls import reverse
 
-from .models import Order, OrderItem
+from .models import Order, OrderItem, Address
 
 
 
@@ -104,3 +104,10 @@ class OrderAdmin(admin.ModelAdmin):
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
     actions = [export_to_csv]
+
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    list_display = ['user', 'name', 'email', 'phone', 'city', 'address', 'postal_code']
+    

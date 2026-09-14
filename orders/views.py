@@ -5,6 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse
 from django.template.loader import render_to_string
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import AddressCreationForm
 from .models import OrderItem, Order
@@ -60,8 +61,11 @@ def order_create(request):
 
     else:
         if request.user.is_authenticated:
-            address = request.user.address 
-            form = AddressCreationForm(instance=address)
+            try:
+                address = request.user.address 
+                form = AddressCreationForm(instance=address)
+            except ObjectDoesNotExist:
+                form = AddressCreationForm(initial={'name': request.user.username, 'email': request.user.email})
         else:
             form = AddressCreationForm()
         template = 'templates/checkout.html'

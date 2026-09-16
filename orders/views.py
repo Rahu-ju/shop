@@ -5,72 +5,56 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.staticfiles import finders
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import AddressCreationForm
 from .models import OrderItem, Order
 from .task import order_created
 from cart.cart import Cart
 
+
+
 # Create your views here.
+def get_user_address(user):
+    return getattr(user, 'address', None) if user.is_authenticated else None
 
 def order_create(request):
     cart = Cart(request)
+    existing_address = get_user_address(request.user)
+
     if request.method == 'POST':
-        form = AddressCreationForm(request.POST)
-        
-        if form.is_valid():
+        form = AddressCreationForm(request.POST, instance=existing_address)
 
-            # create the address and save it to the database
-            address = form.save(commit=False)
-            if request.user.is_authenticated:
-                address.user = request.user
-            address.save()
+        if not form.is_valid():
+            return render(request, 'templates/checkout.html', {'form': form, 'cart': cart})
 
-            # create the order and save it to the database
-            order = Order.objects.create(
-                user=request.user if request.user.is_authenticated else None,
-                address=address,
-            )
-            
-            # Take each item from the cart and create the order item.
-            for item in cart:
-                OrderItem.objects.create(
-                    order = order,
-                    product = item['product'],
-                    price = item['price'],
-                    quantity = item['quantity']
-                )
-            
-            #Clear the cart and send mail asynchronously
-            cart.clear()
-            order_created.delay(order.id)
-
-            # set order id to session and then redirect to the payment process
-            request.session['order_id'] = order.id
-
-            template = 'templates/order-summary.html'
-            context = {'order': order, }
-            return render(request, template, context)
-        
-        else:
-            # template can catch the error using form.error
-            template = 'templates/checkout.html'
-            context = {'form': form, 'cart': cart,}
-            return render(request, template, context)
-
-    else:
+        address = form.save(commit=False)
         if request.user.is_authenticated:
-            try:
-                address = request.user.address 
-                form = AddressCreationForm(instance=address)
-            except ObjectDoesNotExist:
-                form = AddressCreationForm(initial={'name': request.user.username, 'email': request.user.email})
-        else:
-            form = AddressCreationForm()
-        template = 'templates/checkout.html'
-        context = {'form': form, 'cart': cart}
-        return render(request, template, context)
+            address.user = request.user
+        address.save()
+
+        order = Order.objects.create(
+            user=request.user if request.user.is_authenticated else None,
+            address=address,
+        )
+
+        OrderItem.objects.bulk_create([
+            OrderItem(order=order, product=item['product'], price=item['price'], quantity=item['quantity'])
+            for item in cart
+        ])
+
+        cart.clear()
+        order_created.delay(order.id)
+        request.session['order_id'] = order.id
+
+        # return render(request, 'templates/order-summary.html', {'order': order})
+        return redirect('orders:order_summary')
+
+    initial = {}
+    if not existing_address and request.user.is_authenticated:
+        initial = {'name': request.user.username, 'email': request.user.email}
+
+    form = AddressCreationForm(instance=existing_address, initial=initial)
+    return render(request, 'templates/checkout.html', {'form': form, 'cart': cart})
 
 
 

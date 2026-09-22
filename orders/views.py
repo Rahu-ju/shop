@@ -78,13 +78,15 @@ def admin_order_pdf(request, order_id):
 
     # Retrive the order object and Render the template with necessary variables
     order = get_object_or_404(Order, id=order_id)
-    html = render_to_string('orders/order/pdf.html', {'order': order})
+    # html = render_to_string('orders/order/pdf.html', {'order': order})
+    html = render_to_string('templates/pdf.html', {'order': order})
 
     # Find the css file
-    css_file = finders.find('shop/css/pdf.css')
+    # css_file = finders.find('shop/css/pdf.css')
 
     # Feed it to WeasyPrint
-    pdf = weasyprint.HTML(string=html).write_pdf(stylesheets=[weasyprint.CSS(filename=css_file)])
+    # pdf = weasyprint.HTML(string=html).write_pdf(stylesheets=[weasyprint.CSS(filename=css_file)])
+    pdf = weasyprint.HTML(string=html).write_pdf()
 
     # Return it as response
     response = HttpResponse(content=pdf, content_type='application/pdf')

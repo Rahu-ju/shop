@@ -1,0 +1,20 @@
+ALTAS gearbox
+
+Confirm your email address
+
+Hi {{ user.first_name|default:"there" }},
+
+Thanks for creating an account with ALTAS. Confirm this is your email
+address and you'll be ready to track orders, save delivery details, and
+check out faster next time.
+
+Verify your email:
+{{ verification_url }}
+
+This link expires in 24 hours. If you didn't create an ALTAS account,
+you can safely ignore this email — no account will be made without
+confirming.
+
+—
+Atlas · Dhaka, Bangladesh
+altas.info@gmail.com

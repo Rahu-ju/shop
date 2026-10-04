@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<title>Verify your email — ALTAS gearbox</title>
+<!--[if mso]>
+<noscript><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript>
+<![endif]-->
+<style>
+  /* Client support for these is inconsistent, so every important rule is ALSO inlined below. */
+  body, table, td { -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%; }
+  body { margin:0; padding:0; width:100% !important; background:#F2ECDC; }
+  table { border-collapse:collapse; }
+  a { text-decoration:none; }
+  img { border:0; display:block; }
+
+  @media screen and (max-width:600px){
+    .container { width:100% !important; }
+    .px { padding-left:24px !important; padding-right:24px !important; }
+    .py { padding-top:32px !important; padding-bottom:32px !important; }
+    .h1 { font-size:22px !important; }
+    .btn-td { display:block !important; width:100% !important; }
+    .btn-a { display:block !important; text-align:center !important; }
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#F2ECDC;">
+<!-- Preheader (hidden, shows in inbox preview text) -->
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;mso-hide:all;">
+  Confirm your email to finish setting up your ALTAS account. This link expires in 24 hours.
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F2ECDC;">
+  <tr>
+    <td align="center" style="padding:32px 16px;">
+
+      <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background-color:#FBF8F1;border-radius:16px;overflow:hidden;border:1px solid #E7DEC7;">
+
+        <!-- Header band -->
+        <tr>
+          <td align="left" style="background-color:#0E1826;padding:32px 24px;">
+            <table role="presentation" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding-right:8px;" valign="middle">
+                  <!--[if !mso]><!-->
+                  <img src="compass-mark.png" width="24" height="24" alt="" style="display:inline-block;vertical-align:middle;">
+                  <!--<![endif]-->
+                </td>
+                <td valign="middle">
+                  <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:bold;letter-spacing:3px;color:#FBF8F1;">ALTAS <small>gearbox</small></span>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Body -->
+        <tr>
+          <td class="px py" style="padding:48px 48px 24px 48px;">
+            <p style="margin:0 0 8px 0;font-family:'Courier New',monospace;font-size:11px;letter-spacing:2px;color:#A5732F;text-transform:uppercase;">
+              One step left
+            </p>
+            <h1 class="h1" style="margin:0 0 16px 0;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.3;color:#0E1826;font-weight:bold;">
+              Confirm your email address
+            </h1>
+            <p style="margin:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#3B4454;">
+              Hi {{ user.first_name|default:"there" }},
+            </p>
+            <p style="margin:0 0 28px 0;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#3B4454;">
+              Thanks for creating an account with ALTAS. Confirm this is your email address and you'll be ready to track orders, save delivery details, and check out faster next time.
+            </p>
+
+            <!-- Button -->
+            <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 28px 0;">
+              <tr>
+                <td class="btn-td" style="border-radius:999px;background-color:#C08A3E;">
+                  <a href="{{ verification_url }}" class="btn-a" style="display:inline-block;padding:14px 36px;font-family:Georgia,'Times New Roman',serif;font-size:15px;font-weight:bold;color:#0E1826;letter-spacing:0.3px;">
+                    Verify email address
+                  </a>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:0 0 4px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#7C879A;">
+              Or paste this link into your browser:
+            </p>
+            <p style="margin:0 0 28px 0;font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#2C6560;word-break:break-all;">
+              <a href="{{ verification_url }}" style="color:#2C6560;">{{ verification_url }}</a>
+            </p>
+
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E7DEC7;padding-top:20px;">
+              <tr>
+                <td style="padding-top:20px;">
+                  <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#7C879A;">
+                    This link expires in 24 hours. If you didn't create an Atlas account, you can safely ignore this email — no account will be made without confirming.
+                  </p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+          <td align="center" style="background-color:#0E1826;padding:28px 24px;">
+            <p style="margin:0 0 6px 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#F2ECDC;opacity:0.55;">
+              <img src="compass-mark.png" width="16" height="16" alt="" style="display:inline-block;vertical-align:middle;">  ALTAS · Dhaka, Bangladesh
+            </p>
+            <p style="margin:0;font-family:'Courier New',monospace;font-size:11px;color:#F2ECDC;opacity:0.4;">
+              <a href="mailto:hello@altas.duckdns.org" style="color:#D3A75C;">altas.info@gmail.com</a>
+            </p>
+          </td>
+        </tr>
+
+      </table>
+
+      <!-- <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;">
+        <tr>
+          <td align="center" style="padding:20px 24px 0 24px;">
+            <p style="margin:0;font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;color:#7C879A;">
+              You're receiving this because someone signed up for Atlas with this email address.
+            </p>
+          </td>
+        </tr>
+      </table> -->
+
+    </td>
+  </tr>
+</table>
+</body>
+</html>

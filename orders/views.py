@@ -42,8 +42,10 @@ def order_create(request):
             for item in cart
         ])
 
+        # clear the cart, send some parameters to celery task.
         cart.clear()
-        order_created.delay(order.id)
+        base_url = request.build_absolute_uri('/')
+        order_created.delay(order.id, base_url)
         request.session['order_id'] = order.id
 
         # return render(request, 'templates/order-summary.html', {'order': order})

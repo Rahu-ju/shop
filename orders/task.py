@@ -21,7 +21,7 @@ def order_created(order_id, base_url):
                'logo_url': logo_url,
                }
     subject = "Your Order placed — Atlas-gearbox"
-    text_body = render_to_string("templates/emails/verify-email.txt", context)
+    text_body = render_to_string("templates/emails/order_placed.txt", context)
     html_body = render_to_string("templates/emails/order_placed.html", context)
     
 

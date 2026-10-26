@@ -1,0 +1,27 @@
+{% autoescape off %}ALTAS gearbox
+==============================
+
+PAYMENT RECEIVED
+
+Your payment is confirmed
+
+Hi {{ user.address.username|default:"there" }},
+
+Thanks, we've received your payment for order #{{ order.id }}. Your order details are attached to this email as a PDF.
+
+------------------------------
+PAYMENT COMPLETE
+Your payment is complete. We're now preparing your order. Please check the attached PDF (order-{{ order.id }}.pdf) for the full details.
+------------------------------
+
+Order number: #{{ order.id }}
+Date: {{ order.created|date:"d M Y" }}
+
+------------------------------
+
+Questions about your order? Just reply to this email or write to us at altas.info@gmail.com and mention order #{{ order.id }}.
+
+==============================
+ALTAS · Dhaka, Bangladesh
+altas.info@gmail.com
+{% endautoescape %}

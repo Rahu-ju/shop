@@ -1,0 +1,16 @@
+{% autoescape off %}Hi {{ order.user.username|default:"there" }},
+
+Thanks for ordering from ALTAS-gearbox. Your order has been placed.
+
+PAYMENT PENDING
+We haven't received your payment yet. Once it's confirmed, we'll start processing your order, and reach your address as soon as possible.
+
+Order number: {{ order.id }}
+Date: {{ order.created|date:"d M Y" }}
+
+Questions about your order? Just reply to this email or write to us at rahu.exp@gmail.com and mention order #{{ order.id }}.
+
+--
+ALTAS - gearbox · Dhaka, Bangladesh
+rahu.exp@gmail.com
+{% endautoescape %}

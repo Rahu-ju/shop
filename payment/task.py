@@ -25,7 +25,7 @@ def payment_completed(order_id):
 
     # compose email
     subject = f'Payment received - Altas gearbox.'
-    txt_body = render_to_string('templates/emails/order_pid.txt', {'order': order})
+    txt_body = render_to_string('templates/emails/order_paid.txt', {'order': order})
     html_body = render_to_string('templates/emails/order_paid.html', {'order': order})
     email = EmailMultiAlternatives(subject, txt_body, to=[order.address.email])
     email.attach_alternative(html_body, 'text/html')

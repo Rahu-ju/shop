@@ -43,7 +43,8 @@ def stripe_webhook(request):
             order.save()
 
             # Send mail asynchronously by celery
-            payment_completed.delay(order.id)
+            base_url = request.build_absolute_uri('/')
+            payment_completed.delay(order.id, base_url)
             
 
     return HttpResponse(status=200)

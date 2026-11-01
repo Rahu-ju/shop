@@ -19,3 +19,30 @@ openssl req -x509 -newkey rsa:2048 -sha256 -days 3650 -nodes \
 -subj '/CN=localhost' \
 -addext 'subjectAltName=DNS:localhost'
 
+------------- Export data from db ----------------
+Command:
+docker compose exec web python manage.py dumpdata --natural-foreign --natural-primary 
+--exclude contenttypes --exclude auth.permission --exclude admin.logentry 
+--exclude sessions -o data.json
+
+------------ Send file to EC2 instance ----------
+Command:
+scp -i ~/altas-aws.pem data.json ubuntu@16.178.76.28:~/
+
+------------ Copy data from home to inside web container --------
+Command:
+docker compose -f docker-compose-prod.yml cp ~/data.json web:/tmp/
+
+------------- load data  to db ----------------------
+docker compose -f docker-compose-prod.yml exec web python manage.py loaddata /tmp/data.json
+
+------------- sync file to EC2 ---------------
+rsync -avz --progress -e "ssh -i altas-aws.pem" /home/rahu/Documents/projects/shop/media_root ubuntu@16.178.76.28:/home/ubuntu/altas/
+
+------------- Recreate the container to sync the data from host to container -------------
+docker compose -f docker-compose-prod.yml up -d --force-recreate nginx web
+
+------------- Find the file and rm it ---------
+find ~ -name data.json
+
+rm -rf /path to/data.json

@@ -82,7 +82,7 @@
         <input name="quantity" type="number" min="1" max="20" value="{{ product_quantity | default:1 }}" id="quantity" class="w-12 text-center font-mono border-0 focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
         <button hx-post="{% url 'cart:cart_add' product.id %}"
                   hx-headers='{"X-CSRFToken": "{{ csrf_token }}" }'
-                  hx-vals='{"quantity": 1, "override_quantity": true }'
+                  hx-vals='{js:{quantity:document.getElementById("quantity").value()}, "override_quantity": true }'
                   hx-swap="none"
                   type="button" data-step="1" id="increase-button" class="stepper-btn !border-0 !w-10 !h-10" aria-label="Increase quantity">+</button>
       </div>
